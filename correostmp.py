@@ -10,11 +10,11 @@ import os
 import sys
 user=sys.argv[2]
 password=sys.argv[4]
-#address=sys.argv[6]
+address=sys.argv[6]
 #cc=sys.argv[8]
-print("user",user)
+#print("user",user)
 #print("pass",password)
-print(sys.argv[5])
+#print(sys.argv[5])
 
 
 def mandarcorreonormal(user,password,address,cc):
