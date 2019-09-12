@@ -17,7 +17,7 @@ address=sys.argv[6]
 #print(sys.argv[5])
 
 print("Antes de la funcion")
-mandarcorreonormal(user,password,address,'copi')
+
 def mandarcorreonormal(user,password,address,cc):
 	print("Al principio de la funcion")
 	recipients = None
@@ -62,3 +62,5 @@ def mandarcorreonormal(user,password,address,cc):
 		print('Email Sent!')
 	except Exception as e:
 		print("Error: ",e)
+
+mandarcorreonormal(user,password,address,'copi')
