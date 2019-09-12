@@ -8,7 +8,10 @@ import os
 #Cojo los credenciales
 #Hacer funcion para coger esos parámetros
 import sys
-
+user=sys.argv[2]
+password=sys.argv[4]
+address=sys.argv[6]
+cc=sys.argv[8]
 
 def mandarcorreonormal(user,password,address,cc):
 	recipients = None
