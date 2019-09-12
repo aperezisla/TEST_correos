@@ -22,7 +22,7 @@ def mandarcorreonormal(user,password,address,cc):
 	print("Al principio de la funcion")
 	recipients = None
 	#Cambiar valores por los mios propios
-	server = smtplib.SMTP(host='host_address', port=your_port)
+	#server = smtplib.SMTP(host='host_address', port=your_port)
 	#Cambiar el sender cuando me salgan las pruebas a no reply
 	self.sender_email='no-reply@na.telefonicadev.com'
 	self.sender_name='NA-Pruebas'
