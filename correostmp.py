@@ -57,7 +57,7 @@ def mandarcorreonormal(user,password,address,cc):
 		server.starttls()
 		server.ehlo()
 		server.login(user,password)
-		server.sendmail(sender,recipients,msg.as_string())
+		server.sendmail(sender_email,recipients,msg.as_string())
 		server.close()
 		print('Email Sent!')
 	except Exception as e:
