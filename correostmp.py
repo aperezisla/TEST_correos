@@ -50,8 +50,8 @@ def mandarcorreonormal(user,password,address,cc):
 	msg.attach(MIMEText(message,'html','UTF-8'))
 
 	try:
-		self.smtp_host = 'email-smtp.eu-west-1.amazonaws.com'
-		self.smtp_port = 587
+		smtp_host = 'email-smtp.eu-west-1.amazonaws.com'
+		smtp_port = 587
 		server = smtplib.SMTP(smtp_host,smtp_port)
 		server.ehlo()
 		server.starttls()
