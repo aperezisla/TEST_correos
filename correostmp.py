@@ -7,8 +7,11 @@ import jinja2
 import os
 #Cojo los credenciales
 #Hacer funcion para coger esos parámetros
-
-@correo
+import sys
+user=sys.argv[1]
+password=sys.argv[2]
+address=sys.argv[3]
+cc=sys.argv[4]
 
 def mandarcorreonormal(user,password,address,cc):
 	recipients = None
@@ -23,7 +26,7 @@ def mandarcorreonormal(user,password,address,cc):
 
 	msg = MIMEMultipart()
 
-	message = "hola"
+	message = "mensaje de prueba"
 
 	#Parametros
 	password = self.password
