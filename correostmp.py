@@ -24,19 +24,19 @@ def mandarcorreonormal(user,password,address,cc):
 	#Cambiar valores por los mios propios
 	#server = smtplib.SMTP(host='host_address', port=your_port)
 	#Cambiar el sender cuando me salgan las pruebas a no reply
-	self.sender_email='no-reply@na.telefonicadev.com'
-	self.sender_name='NA-Pruebas'
+	sender_email='no-reply@na.telefonicadev.com'
+	sender_name='NA-Pruebas'
 	#user es el usuario para poder usar smtp
-	self.user=user
-	self.password=password
+	user=user
+	password=password
 
 	msg = MIMEMultipart()
 
 	message = "mensaje de prueba"
 
 	#Parametros
-	password = self.password
-	msg['From'] = email.utils,formataddr((self.sender_name,self.sender_email))
+	password = password
+	msg['From'] = email.utils,formataddr((sender_name,sender_email))
 	msg['To'] = ','.join(address)
 	msg['Subject'] = "Acceso a AWS Network Analytics entorno de ....."
 
@@ -52,12 +52,12 @@ def mandarcorreonormal(user,password,address,cc):
 	try:
 		self.smtp_host = 'email-smtp.eu-west-1.amazonaws.com'
 		self.smtp_port = 587
-		server = smtplib.SMTP(self.smtp_host,self.smtp_port)
+		server = smtplib.SMTP(smtp_host,smtp_port)
 		server.ehlo()
 		server.starttls()
 		server.ehlo()
-		server.login(self.user,self.password)
-		server.sendmail(self.sender,recipients,msg.as_string())
+		server.login(user,password)
+		server.sendmail(sender,recipients,msg.as_string())
 		server.close()
 		print('Email Sent!')
 	except Exception as e:
