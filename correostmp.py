@@ -16,8 +16,9 @@ address=sys.argv[6]
 #print("pass",password)
 #print(sys.argv[5])
 
-
+print("Antes de la funcion")
 def mandarcorreonormal(user,password,address,cc):
+	print("Al principio de la funcion")
 	recipients = None
 	#Cambiar valores por los mios propios
 	server = smtplib.SMTP(host='host_address', port=your_port)
