@@ -36,7 +36,7 @@ def mandarcorreonormal(user,password,address,cc):
 
 	#Parametros
 	password = password
-	msg['From'] = email.utils,formataddr((sender_name,sender_email))
+	msg['From'] = email.utils.formataddr((sender_name,sender_email))
 	msg['To'] = ','.join(address)
 	msg['Subject'] = "Acceso a AWS Network Analytics entorno de ....."
 
