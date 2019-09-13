@@ -72,3 +72,5 @@ def send_email(user,password,address):
     except Exception as e:
 
         print("Error: ", e)
+
+send_email(user,password,address)
