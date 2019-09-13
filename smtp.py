@@ -28,7 +28,7 @@ def send_email(user,password,address):
 
     msg['From'] = email.utils.formataddr((sender_name, sender))
 
-    msg['To'] = ','.join(address)
+    msg['To'] =address
 
     message="mensaje de prueba"
 
