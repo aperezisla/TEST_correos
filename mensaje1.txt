@@ -1,6 +1,6 @@
 Hola $name,
 
-Se ha creado el usuario para acceder a los recursos de la cuenta de AWS de Network Analytics entorno $entorno
+Se ha creado el usuario para acceder a los recursos de la cuenta de AWS de Network Analytics entorno $entorno .
 Los datos de acceso son los siguientes:
 
 Login URL: https://$loginurl.signin.aws.amazon.com/console
