@@ -57,7 +57,7 @@ def mandarcorreonormal(user,password,address,cc):
 		server = smtplib.SMTP_SSL("email-smtp.eu-west-1.amazonaws.com",465)
 		server.set_debuglevel(1)
 		#server.ehlo()
-		server.starttls()
+		#server.starttls()
 		server.ehlo()
 		server.login(user,password)
 		server.sendmail(msg['From'],msg['To'],msg.as_string())
