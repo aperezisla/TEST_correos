@@ -19,7 +19,7 @@ address=sys.argv[6]
 '''
 
 def send_email(user,password,address):
-
+    address="<andrea.perezisla.practicas@telefonica.com>"
     msg = MIMEMultipart('alternative')
     sender = 'no-reply@na.telefonicadev.com'
     sender_name = 'na-engineering'
