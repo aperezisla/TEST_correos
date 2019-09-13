@@ -36,7 +36,7 @@ def mandarcorreonormal(user,password,address,cc):
 
 	#Parametros
 	password = password
-	msg['From'] = ('NA-Pruebas','no-reply@na.telefonicadev.com')
+	msg['From'] = "no-reply@na.telefonicadev.com"
 	#msg['From'] = email.utils.formataddr((sender_name,sender_email))
 	msg['To'] = "andrea.perezisla.practicas@telefonica.com"
 	#msg['To'] = ','.join(address)
