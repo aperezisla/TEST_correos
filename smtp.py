@@ -63,7 +63,7 @@ def send_email(user,password,address):
 
         server.login(user, password)
 
-        server.sendmail(sender, msg['To'], message.as_string())
+        server.sendmail(sender, msg['To'], message)
 
         server.close()
 
