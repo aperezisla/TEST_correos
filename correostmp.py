@@ -36,8 +36,10 @@ def mandarcorreonormal(user,password,address,cc):
 
 	#Parametros
 	password = password
-	msg['From'] = email.utils.formataddr((sender_name,sender_email))
-	msg['To'] = ','.join(address)
+	msg['From'] = "no-reply@na.telefonicadev.com"
+	#msg['From'] = email.utils.formataddr((sender_name,sender_email))
+	msg['To'] = "andrea.perezisla.practicas@telefonica.com"
+	#msg['To'] = ','.join(address)
 	msg['Subject'] = "Acceso a AWS Network Analytics entorno de ....."
 
 	if cc is not None:
@@ -47,18 +49,19 @@ def mandarcorreonormal(user,password,address,cc):
 		recipients = address
 
 	msg.attach(MIMEText(message,'plain','UTF-8'))
-	msg.attach(MIMEText(message,'html','UTF-8'))
+	#msg.attach(MIMEText(message,'html','UTF-8'))
 
 	try:
 		smtp_host = 'email-smtp.eu-west-1.amazonaws.com'
 		smtp_port = 587
-		server = smtplib.SMTP(smtp_host,smtp_port)
-		server.ehlo()
+		server = smtplib.SMTP('email-smtp.eu-west-1.amazonaws.com: 587')
+		#server.ehlo()
 		server.starttls()
-		server.ehlo()
+		#server.ehlo()
 		server.login(user,password)
-		server.sendmail(sender_email,recipients,msg.as_string())
-		server.close()
+		server.sendmail(msg['From'],msg['To'],msg.as_string())
+		#server.close()
+		server.quit()
 		print('Email Sent!')
 	except Exception as e:
 		print("Error: ",e)
