@@ -27,7 +27,7 @@ def send_email(user,password,address):
     smtp_port=587
     msg['Subject'] = "correo de prueba"
 
-    msg['From'] = email.utils.formataddr((self.sender_name, self.sender))
+    msg['From'] = email.utils.formataddr((sender_name, sender))
 
     msg['To'] = ','.join(address)
 
