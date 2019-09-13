@@ -37,7 +37,7 @@ def send_email(user,password,address):
 
     #message=(" Hola ......,\r\n")
     message_template = read_template('mensaje1.txt')
-    message = message_template.substitute(name='Nombre', entorno='int', loginurl='na-int', user_name='nombre.usuario')
+    message = message_template.safe_substitute(name='Nombre', entorno='int', loginurl='na-int', user_name='nombre.usuario')
     #if cc is not None:
 
         #msg['CC'] = ','.join(cc)
