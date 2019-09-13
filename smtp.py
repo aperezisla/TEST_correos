@@ -24,7 +24,7 @@ def send_email(user,password,address):
     sender_name = 'na-engineering'
     smtp_host='email-smtp.eu-west-1.amazonaws.com'
     smtp_port=587
-    msg['Subject'] = "correo de prueba"
+    msg['Subject'] = 'Hola'
 
     msg['From'] = email.utils.formataddr((sender_name, sender))
 
@@ -62,7 +62,7 @@ def send_email(user,password,address):
 
         server.login(user, password)
 
-        server.sendmail(sender, msg['To'], message)
+        server.sendmail(sender, msg['To'], msg.as_string())
 
         server.close()
 
