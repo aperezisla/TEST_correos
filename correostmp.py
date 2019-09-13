@@ -36,9 +36,9 @@ def mandarcorreonormal(user,password,address,cc):
 
 	#Parametros
 	password = password
-	msg['From'] = "no-reply@na.telefonicadev.com"
+	msg['From'] = 'NA Pruebas <no-reply@na.telefonicadev.com>'
 	#msg['From'] = email.utils.formataddr((sender_name,sender_email))
-	msg['To'] = "andrea.perezisla.practicas@telefonica.com"
+	msg['To'] = 'andrea.perezisla.practicas@telefonica.com'
 	#msg['To'] = ','.join(address)
 	msg['Subject'] = "Acceso a AWS Network Analytics entorno de ....."
 
@@ -54,11 +54,11 @@ def mandarcorreonormal(user,password,address,cc):
 	try:
 		smtp_host = "email-smtp.eu-west-1.amazonaws.com"
 		smtp_port = 587
-		server = smtplib.SMTP_SSL("email-smtp.eu-west-1.amazonaws.com")
-		server.set_debuglevel(1)
-		#server.ehlo()
-		#server.starttls()
-		#server.ehlo()
+		server = smtplib.SMTP(smtp_host,587)
+		#server.set_debuglevel(1)
+		server.ehlo()
+		server.starttls()
+		server.ehlo()
 		server.login(user,password)
 		server.sendmail(msg['From'],msg['To'],msg.as_string())
 		#server.close()
