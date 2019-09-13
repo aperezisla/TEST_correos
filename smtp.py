@@ -50,7 +50,7 @@ def send_email(user,password,address):
 
 
 
-    msg.attach(MIMEText(message, 'plain', 'UTF-8'))
+    msg.attach(MIMEText(message, 'plain'))
 
     #msg.attach(MIMEText(body_html, 'html', 'UTF-8'))
 
