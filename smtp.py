@@ -97,7 +97,7 @@ send_email(user,password,address)
 #De aqui para arriba lo hace bien, creo funcion para mandar el segundo correo
 
 print("creo la contraseña")
-response = client.create_access_key(
+response = iam.create_access_key(
     UserName='test.test',
 )
 
