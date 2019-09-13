@@ -27,6 +27,7 @@ def send_email(user,password,address):
     msg['To'] =address
 
     message_template = read_template('mensaje1.txt')
+    #poner opciones dependiendo de la cuenta donde se ha creado al usuario
     message = message_template.safe_substitute(name='Nombre', entorno='int', loginurl='na-int', user_name='nombre.usuario')
     #if cc is not None:
 
@@ -71,34 +72,34 @@ user=sys.argv[2]
 password=sys.argv[4]
 address=sys.argv[6]
 
-iam = boto3.client('iam')
-response = iam.create_user(
-    UserName='test.test'
-)
+#iam = boto3.client('iam')
+#response = iam.create_user(
+#    UserName='test.test'
+#)
 
 #print(response)
 
 #Le añado a los dos grupos: 
-response = iam.add_user_to_group(
-    GroupName='BasicIAM',
-    UserName='test.test'
-)
+#response = iam.add_user_to_group(
+#    GroupName='BasicIAM',
+#    UserName='test.test'
+#)
 #print(response)
 
-response = iam.add_user_to_group(
-    GroupName='ForceMFA',
-    UserName='test.test'
-)
+#response = iam.add_user_to_group(
+#    GroupName='ForceMFA',
+#    UserName='test.test'
+#)
 #print(response)
-print("se ha añadido al usuario a los dos grupos")
+#print("se ha añadido al usuario a los dos grupos")
 print("ahora se manda el primer correo")
 send_email(user,password,address)
 
 #De aqui para arriba lo hace bien, creo funcion para mandar el segundo correo
 
-print("creo la contraseña")
-response = iam.create_access_key(
-    UserName='test.test',
-)
+#print("creo la contraseña")
+#response = iam.create_access_key(
+#    UserName='test.test',
+#)
 
-print(response)
+#print(response)
