@@ -25,7 +25,7 @@ def get_entorno(stage):
         print('Stage can only be dev, int, pro or opt')
         sys.exit(1)
 
-def get_entorno(stage):
+def get_loginurl(stage):
     if stage == 'int':
         return 'na-int'
     elif stage == 'dev':
