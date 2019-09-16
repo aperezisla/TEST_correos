@@ -12,6 +12,16 @@ import sys
 import string
 import random
 
+def get_name(new_user):
+    real=''
+    for i in new_user:
+        if(i == '.'):
+            break
+        else:
+            real += i
+        real=real[0].upper() + real[1:]
+        return(real)
+
 def get_entorno(stage):
     if stage == 'int':
         return 'integración'
@@ -140,11 +150,12 @@ def send_email1(user,password,address,new_user,stage):
     smtp_port=587
     entorno=get_entorno(stage)
     loginurl=get_loginurl(stage)
+    nombre=get_name(new_user)
     msg['Subject'] = 'Acceso a AWS Network Analytics entorno de '+ entorno
     msg['From'] = email.utils.formataddr((sender_name, sender))
     msg['To'] =address
     message_template = read_template('mensaje1.txt')
-    message = message_template.safe_substitute(name='Nombre', entorno=entorno, loginurl=loginurl, user_name=new_user)
+    message = message_template.safe_substitute(name=nombre, entorno=stage, loginurl=loginurl, user_name=new_user)
     #if cc is not None:
         #msg['CC'] = ','.join(cc)
         #recipients = to + cc
@@ -171,13 +182,14 @@ def send_email2(user,password,address,new_user,stage):
     sender_name = 'na-engineering'
     smtp_host='email-smtp.eu-west-1.amazonaws.com'
     smtp_port=587
+    nombre=get_name(new_user)
     msg['Subject'] = 'Credenciales AWS Network Analytics entorno '+ stage
     msg['From'] = email.utils.formataddr((sender_name, sender))
     msg['To'] =address
     #Necesito el mensaje en html?
     message_template = read_template('mensaje2.txt')
     #poner opciones dependiendo de la cuenta donde se ha creado al usuario
-    message = message_template.safe_substitute(name='Nombre')
+    message = message_template.safe_substitute(name=nombre)
     #if cc is not None:
         #msg['CC'] = ','.join(cc)
         #recipients = to + cc
