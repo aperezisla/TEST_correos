@@ -10,6 +10,7 @@ import jinja2
 import os
 import sys
 import string
+import secrets
 
 def generateSecureRandomString(stringLength = 12):
     password_characters = string.ascii_letters + string.digits + string.punctuation
