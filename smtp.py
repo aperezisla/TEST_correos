@@ -12,23 +12,57 @@ import sys
 import string
 import random
 
+def get_entorno(stage):
+    if stage == 'int':
+        return 'integración'
+    elif stage == 'dev':
+        return 'desarrollo'
+    elif stage == 'opt':
+        return 'operaciones'
+    elif stage == 'pro':
+        return 'producción'
+    else:
+        print('Stage can only be dev, int, pro or opt')
+        sys.exit(1)
+
+def get_entorno(stage):
+    if stage == 'int':
+        return 'na-int'
+    elif stage == 'dev':
+        return 'na-dev'
+    elif stage == 'opt':
+        return 'na-opt'
+    elif stage == 'pro':
+        return 'na-pro'
+    else:
+        print('Stage can only be dev, int, pro or opt')
+        sys.exit(1)
+
 def generateSecureRandomString(stringLength = 12):
     password_characters = string.ascii_letters + string.digits + string.punctuation
     return ''.join(random.sample(password_characters,stringLength))
 
+def get_role(stage):
+    if stage == 'int':
+        return 'arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
+    elif stage == 'dev':
+        return 'arn:aws:iam::363896548138:role/dev-na-delegated-jenkins'
+    elif stage == 'opt':
+        return 'arn:aws:iam::416481324865:role/pro-opt-delegated-jenkins'
+    elif stage == 'pro':
+        return 'arn:aws:iam::486960344036:role/pro-na-delegated-jenkins'
+    else:
+        print('Stage can only be dev, int, pro or opt')
+        sys.exit(1)
+
 #Hacer todos los casos, mejor coger el rol del usuario a crear
 stage = sys.argv[2]
-newuser = sys.argv[4]
+new_user = sys.argv[4]
 user=sys.argv[6]
 password=sys.argv[8]
 address=sys.argv[10]
 
-
-if stage == 'int':
-    role_arn = role_arn = 'arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
-else:
-    print('Stage can only be dev, int, pro or opt')
-    sys.exit(1)
+role_arn=get_role(stage)
 
 sts=boto3.client('sts')
 response = sts.assume_role(
@@ -50,25 +84,25 @@ iam = boto3.client(
 
 # Se crea el usuario
 response = iam.create_user(
-    UserName=newuser
+    UserName=new_user
 )
 
 #Le añado a los dos grupos: 
 response = iam.add_user_to_group(
     GroupName='BasicIAM',
-    UserName='test.test'
+    UserName=new_user
 )
 
 response = iam.add_user_to_group(
     GroupName='ForceMFA',
-    UserName='test.test'
+    UserName=new_user
 )
 
 #aqui creo la password
 contrasena = generateSecureRandomString(12)
 
 response = iam.create_login_profile(
-    UserName=newuser,
+    UserName=new_user,
     Password=contrasena,
     PasswordResetRequired=True
     )
@@ -76,7 +110,7 @@ response = iam.create_login_profile(
 #VOY A CREAR LAS CREDENCIALES
 print("creo las credenciales")
 response = iam.create_access_key(
-    UserName='test.test',
+    UserName=new_user,
 )
 
 data = response['AccessKey']
@@ -98,18 +132,19 @@ def read_template(filename):
     return Template(template_file_content)
 
 #PONER EN COPIA A NA CUANDO ESTE TODO OK
-def send_email1(user,password,address):
+def send_email1(user,password,address,new_user,stage):
     msg = MIMEMultipart('alternative')
     sender = 'no-reply@na.telefonicadev.com'
     sender_name = 'na-engineering'
     smtp_host='email-smtp.eu-west-1.amazonaws.com'
     smtp_port=587
-    msg['Subject'] = 'Acceso a AWS Network Analytics entorno de ....'
+    entorno=get_entorno(stage)
+    loginurl=get_loginurl(stage)
+    msg['Subject'] = 'Acceso a AWS Network Analytics entorno de '+ entorno
     msg['From'] = email.utils.formataddr((sender_name, sender))
     msg['To'] =address
     message_template = read_template('mensaje1.txt')
-    #poner opciones dependiendo de la cuenta donde se ha creado al usuario
-    message = message_template.safe_substitute(name='Nombre', entorno='int', loginurl='na-int', user_name='nombre.usuario')
+    message = message_template.safe_substitute(name='Nombre', entorno=entorno, loginurl=loginurl, user_name=new_user)
     #if cc is not None:
         #msg['CC'] = ','.join(cc)
         #recipients = to + cc
@@ -130,19 +165,19 @@ def send_email1(user,password,address):
         print("Error: ", e)
     #Una vez mandado el primer correo, se manda el segundo con los credenciales
 
-def send_email2(user,password,address):
+def send_email2(user,password,address,new_user,stage):
     msg = MIMEMultipart('alternative')
     sender = 'no-reply@na.telefonicadev.com'
     sender_name = 'na-engineering'
     smtp_host='email-smtp.eu-west-1.amazonaws.com'
     smtp_port=587
-    msg['Subject'] = 'Credenciales AWS Network Analytics entorno ....'
+    msg['Subject'] = 'Credenciales AWS Network Analytics entorno '+ stage
     msg['From'] = email.utils.formataddr((sender_name, sender))
     msg['To'] =address
     #Necesito el mensaje en html?
     message_template = read_template('mensaje2.txt')
     #poner opciones dependiendo de la cuenta donde se ha creado al usuario
-    message = message_template.safe_substitute(name='Nombre', entorno='int', loginurl='na-int', user_name='nombre.usuario')
+    message = message_template.safe_substitute(name='Nombre')
     #if cc is not None:
         #msg['CC'] = ','.join(cc)
         #recipients = to + cc
@@ -173,10 +208,10 @@ def send_email2(user,password,address):
 
 
 print("ahora se manda el primer correo")
-send_email1(user,password,address)
+send_email1(user,password,address,new_user,stage)
 
 #De aqui para arriba lo hace bien, creo funcion para mandar el segundo correo
 
 print("ahora mando el segundo correo con las credenciales")
-send_email2(user,password,address)
+send_email2(user,password,address,new_user,stage)
 print("se han mandado ambos correos")
