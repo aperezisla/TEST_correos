@@ -70,14 +70,13 @@ def send_email2(user,password,address):
     msg.attach(MIMEText(message, 'plain'))
     #msg.attach(MIMEText(body_html, 'html', 'UTF-8'))
 
-    archivo ="credentials.csv"
-    adjunto = open("credentials.csv",'r')
-    p = MIMEBase('application','octet-stream')
-    p.set_payload((adjunto).read())
-    encoders.encode_base64(p)
-    p.add_header('Content-Disposition',"adjunto; archivo = %s" % archivo)
-    msg.attach(p)
-
+    #adjunto las credenciales
+    mail_file = file('crd.csv').read()
+    mail_file=MIMEBase('application','csv')
+    mail_file.set_payload(mail_file)
+    mail_file.add_header('Content-Disposition','attachment',filename='crd.csv')
+    Encoders.encode_base64(mail_file)
+    msg.attach(mail_file)
 
     try:
         server = smtplib.SMTP(smtp_host,smtp_port)
@@ -124,3 +123,4 @@ send_email1(user,password,address)
 
 print("ahora mando el segundo correo con las credenciales")
 send_email2(user,password,address)
+print("se han mandado ambos correos")
