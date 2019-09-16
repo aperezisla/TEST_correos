@@ -14,7 +14,7 @@ import random
 
 def generateSecureRandomString(stringLength = 12):
     password_characters = string.ascii_letters + string.digits + string.punctuation
-    return ''.join(random.choice(password_characters) for i in range(stringLength))
+    return ''.join(random.sample(password_characters,stringLength))
 
 #Hacer todos los casos, mejor coger el rol del usuario a crear
 stage = sys.argv[2]
