@@ -9,6 +9,11 @@ from string import Template
 import jinja2
 import os
 import sys
+import string
+
+def generateSecureRandomString(stringLength = 12):
+    password_characters = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(secrets.choice(password_characters) for i in range(stringLength))
 
 #Hacer todos los casos, mejor coger el rol del usuario a crear
 stage = sys.argv[2]
@@ -85,9 +90,6 @@ with open('credentials.csv','w') as f:
 print("el csv se ha creado")
 print("me meto en las funciones")
 
-def generateSecureRandomString(stringLength = 12):
-    password_characters = string.ascii_letters + string.digits + string.punctuation
-    return ''.join(secrets.choice(password_characters) for i in range(stringLength))
 
 def read_template(filename):
     with open(filename,'r', encoding='ISO-8859-1') as template_file:
