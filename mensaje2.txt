@@ -1,0 +1,6 @@
+Hola $name,
+
+Te adjunto las credenciales iniciales para acceder a AWS.
+
+Un saludo,
+NA Engineering

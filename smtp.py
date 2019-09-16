@@ -3,6 +3,7 @@ import smtplib
 import email.utils
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
 from string import Template
 import jinja2
 import os
@@ -14,57 +15,80 @@ def read_template(filename):
     return Template(template_file_content)
 
 #PONER EN COPIA A NA CUANDO ESTE TODO OK
-def send_email(user,password,address):
+def send_email1(user,password,address):
     msg = MIMEMultipart('alternative')
     sender = 'no-reply@na.telefonicadev.com'
     sender_name = 'na-engineering'
     smtp_host='email-smtp.eu-west-1.amazonaws.com'
     smtp_port=587
     msg['Subject'] = 'Acceso a AWS Network Analytics entorno de ....'
-
     msg['From'] = email.utils.formataddr((sender_name, sender))
-
     msg['To'] =address
-
+    #Necesito el mensaje en html?
     message_template = read_template('mensaje1.txt')
     #poner opciones dependiendo de la cuenta donde se ha creado al usuario
     message = message_template.safe_substitute(name='Nombre', entorno='int', loginurl='na-int', user_name='nombre.usuario')
     #if cc is not None:
-
         #msg['CC'] = ','.join(cc)
-
         #recipients = to + cc
-
     #else:
-
         #recipients = to
-
     msg.attach(MIMEText(message, 'plain'))
+    #msg.attach(MIMEText(body_html, 'html', 'UTF-8'))
+    try:
+        server = smtplib.SMTP(smtp_host,smtp_port)
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
+        server.login(user, password)
+        server.sendmail(sender, msg['To'], msg.as_string())
+        server.close()
+        print('Mail enviado satisfactoriamente')
+    except Exception as e:
+        print("Error: ", e)
+    #Una vez mandado el primer correo, se manda el segundo con los credenciales
 
+def send_email2(user,password,address):
+    msg = MIMEMultipart('alternative')
+    sender = 'no-reply@na.telefonicadev.com'
+    sender_name = 'na-engineering'
+    smtp_host='email-smtp.eu-west-1.amazonaws.com'
+    smtp_port=587
+    msg['Subject'] = 'Credenciales AWS Network Analytics entorno ....'
+    msg['From'] = email.utils.formataddr((sender_name, sender))
+    msg['To'] =address
+    #Necesito el mensaje en html?
+    message_template = read_template('mensaje2.txt')
+    #poner opciones dependiendo de la cuenta donde se ha creado al usuario
+    message = message_template.safe_substitute(name='Nombre', entorno='int', loginurl='na-int', user_name='nombre.usuario')
+    #if cc is not None:
+        #msg['CC'] = ','.join(cc)
+        #recipients = to + cc
+    #else:
+        #recipients = to
+    msg.attach(MIMEText(message, 'plain'))
     #msg.attach(MIMEText(body_html, 'html', 'UTF-8'))
 
+    archivo ="credentials.csv"
+    adjunto = open("credentials.csv",'r')
+    p = MIMEBase('application','octet-stream')
+    p.set_payload((adjunto).read())
+    encoders.encode_base64(p)
+    p.add_header('Content-Disposition',"adjunto; archivo = %s" % archivo)
+    msg.attach(p)
+
+
     try:
-
         server = smtplib.SMTP(smtp_host,smtp_port)
-
         server.ehlo()
-
         server.starttls()
-
         server.ehlo()
-
         server.login(user, password)
-
         server.sendmail(sender, msg['To'], msg.as_string())
-
         server.close()
-
         print('Mail enviado satisfactoriamente')
-
     except Exception as e:
-
         print("Error: ", e)
-
     #Una vez mandado el primer correo, se manda el segundo con los credenciales
 
 
@@ -93,13 +117,9 @@ address=sys.argv[6]
 #print(response)
 #print("se ha añadido al usuario a los dos grupos")
 print("ahora se manda el primer correo")
-send_email(user,password,address)
+send_email1(user,password,address)
 
 #De aqui para arriba lo hace bien, creo funcion para mandar el segundo correo
 
-#print("creo la contraseña")
-#response = iam.create_access_key(
-#    UserName='test.test',
-#)
-
-#print(response)
+print("ahora mando el segundo correo con las credenciales")
+send_email2(user,password,address)
