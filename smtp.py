@@ -47,7 +47,43 @@ response = iam.create_user(
     UserName=newuser
 )
 
-print(response)
+#Le añado a los dos grupos: 
+response = iam.add_user_to_group(
+    GroupName='BasicIAM',
+    UserName='test.test'
+)
+
+response = iam.add_user_to_group(
+    GroupName='ForceMFA',
+    UserName='test.test'
+)
+
+#aqui creo la password
+contrasena = generateSecureRandomString(12)
+
+response = iam.create_login_profile(
+    UserName=newuser,
+    Password=contrasena,
+    PasswordResetRequired=True
+    )
+
+#VOY A CREAR LAS CREDENCIALES
+print("creo las credenciales")
+response = iam.create_access_key(
+    UserName='test.test',
+)
+
+data = response['AccessKey']
+data.pop('Status')
+data.pop('CreateDate')
+data['Password'] = contrasena
+data['ConsoleLoginLink']='https://na-int.signin.aws.amazon.com/console'
+with open('credentials.csv','w') as f:
+    for key in data.keys():
+        f.write("%s,%s\n"%(key,data[key]))
+
+print("el csv se ha creado")
+print("me meto en las funciones")
 
 
 def read_template(filename):
@@ -136,5 +172,5 @@ send_email1(user,password,address)
 #De aqui para arriba lo hace bien, creo funcion para mandar el segundo correo
 
 print("ahora mando el segundo correo con las credenciales")
-#send_email2(user,password,address)
+send_email2(user,password,address)
 print("se han mandado ambos correos")
