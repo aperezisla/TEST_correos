@@ -12,8 +12,8 @@ import sys
 import string
 import random
 
-def generateSecureRandomString(stringLength = 6):
-    password_characters = string.ascii_letters + string.digits
+def generateSecureRandomString(stringLength = 12):
+    password_characters = string.ascii_letters + string.digits + string.punctuation
     return ''.join(random.choice(password_characters) for i in range(stringLength))
 
 #Hacer todos los casos, mejor coger el rol del usuario a crear
