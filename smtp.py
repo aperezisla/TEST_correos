@@ -19,8 +19,8 @@ def get_name(new_user):
             break
         else:
             real += i
-        real=real[0].upper() + real[1:]
-        return(real)
+    real=real[0].upper() + real[1:]
+    return(real)
 
 def get_entorno(stage):
     if stage == 'int':
