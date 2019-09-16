@@ -154,7 +154,7 @@ def send_email2(user,password,address):
     #adjunto las credenciales
     #mail_file = file('crd.csv').read()
     mail_file=MIMEBase('application','csv')
-    mail_file.set_payload(open('credentials.csv','r').read()
+    mail_file.set_payload(open('credentials.csv','r').read())
     mail_file.add_header('Content-Disposition','attachment',filename='credentials.csv')
     encoders.encode_base64(mail_file)
     msg.attach(mail_file)
