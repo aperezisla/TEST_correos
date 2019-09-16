@@ -4,7 +4,7 @@ import email.utils
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
-from email import Encoders
+from email import encoders
 from string import Template
 import jinja2
 import os
@@ -75,7 +75,7 @@ def send_email2(user,password,address):
     mail_file=MIMEBase('application','csv')
     mail_file.set_payload(open('crd.csv','r').read())
     mail_file.add_header('Content-Disposition','attachment',filename='crd.csv')
-    Encoders.encode_base64(mail_file)
+    encoders.encode_base64(mail_file)
     msg.attach(mail_file)
 
     try:
