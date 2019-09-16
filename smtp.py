@@ -39,7 +39,7 @@ def get_loginurl(stage):
         sys.exit(1)
 
 def generateSecureRandomString(stringLength = 12):
-    password_characters = string.ascii_letters + string.digits + string.punctuation
+    password_characters = string.ascii_letters + string.digits 
     return ''.join(random.sample(password_characters,stringLength))
 
 def get_role(stage):
