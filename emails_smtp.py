@@ -48,7 +48,7 @@ def send_email1(user,password,address,new_user,stage):
         print("Error: ", e)
     #Una vez mandado el primer correo, se manda el segundo con los credenciales
 
-    def send_email2(user,password,address,new_user,stage):
+def send_email2(user,password,address,new_user,stage):
     msg = MIMEMultipart('alternative')
     sender = 'no-reply@na.telefonicadev.com'
     sender_name = 'na-engineering'
