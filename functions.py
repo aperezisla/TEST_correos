@@ -74,3 +74,33 @@ def read_template(filename):
     with open(filename,'r', encoding='ISO-8859-1') as template_file:
         template_file_content = template_file.read()
     return Template(template_file_content)
+
+
+def get_accounts(rol):
+	if rol == 1:
+		#Desarrollador global
+		#Se crea cuenta en dev y pro
+		return (1,0,1,0)
+	elif rol == 2:
+		#Desarrollador (caso de uso)
+		#Depende del caso de uso, se asignan diferentes grupos al usuario
+		#Se crea cuenta en dev
+		return (0,0,1,0)
+	elif rol == 3:
+		#Desarrollador avanzado de Tableau (caso de uso)
+		#Depende del caso de uso, se asignan diferentes grupos al usuario
+		#Se crea cuenta en pro y dev
+		return (1,0,1,0)
+	elif rol == 4:
+		#Responsable de área usuaria (área)
+		#Se crea cuenta en pro
+		return (1,0,0,0)
+	elif rol == 5:
+		#Engineering
+		#Se crea cuenta en pro, dev, int y opt
+		return (1,1,1,1)
+	elif rol == 6:
+		#Engineering Manager
+		#Se crea cuenta en pro, dev, int y opt
+		return (1,1,1,1)
+	
