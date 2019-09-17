@@ -49,7 +49,10 @@ def get_loginurl(stage):
         sys.exit(1)
 
 def generateSecureRandomString(stringLength = 12):
-    password_characters = string.ascii_letters + string.digits + string.punctuation
+    #Para q no haya fallos de vez en cuando por la password policy, comprobar que
+    #el caracter especial es adecuado, sino generar otra contraseña
+    special_characters="!@#$%^&*()_+-=[]{}|'"
+    password_characters = string.ascii_letters + string.digits + special_characters
     return ''.join(random.sample(password_characters,stringLength))
 
 def get_role(stage):
@@ -186,20 +189,13 @@ def send_email2(user,password,address,new_user,stage):
     msg['Subject'] = 'Credenciales AWS Network Analytics entorno '+ stage
     msg['From'] = email.utils.formataddr((sender_name, sender))
     msg['To'] =address
-    #Necesito el mensaje en html?
-    message_template = read_template('mensaje2.txt')
-    #poner opciones dependiendo de la cuenta donde se ha creado al usuario
-    message = message_template.safe_substitute(name=nombre)
-    #if cc is not None:
-        #msg['CC'] = ','.join(cc)
-        #recipients = to + cc
-    #else:
-        #recipients = to
-    msg.attach(MIMEText(message, 'plain'))
-    #msg.attach(MIMEText(body_html, 'html', 'UTF-8'))
 
-    #adjunto las credenciales
-    #mail_file = file('crd.csv').read()
+    message_template = read_template('mensaje2.txt')
+
+    message = message_template.safe_substitute(name=nombre)
+
+    msg.attach(MIMEText(message, 'plain'))
+
     mail_file=MIMEBase('application','csv')
     mail_file.set_payload(open('credentials.csv','r').read())
     mail_file.add_header('Content-Disposition','attachment',filename='credentials.csv')
@@ -214,15 +210,13 @@ def send_email2(user,password,address,new_user,stage):
         server.login(user, password)
         server.sendmail(sender, msg['To'], msg.as_string())
         server.close()
-        print('Mail enviado satisfactoriamente')
+        print('Mail de credenciales enviado satisfactoriamente')
     except Exception as e:
         print("Error: ", e)
 
 
 print("ahora se manda el primer correo")
 send_email1(user,password,address,new_user,stage)
-
-#De aqui para arriba lo hace bien, creo funcion para mandar el segundo correo
 
 print("ahora mando el segundo correo con las credenciales")
 send_email2(user,password,address,new_user,stage)
