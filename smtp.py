@@ -41,7 +41,7 @@ response = iam.add_user_to_group(
     UserName=new_user
 )
 
-functions.create_credentials(new_user)
+functions.create_credentials(new_user,iam)
 
 print("el csv se ha creado")
 print("me meto en las funciones")

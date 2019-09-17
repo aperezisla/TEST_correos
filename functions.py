@@ -97,7 +97,7 @@ def aws_connection(role_arn):
 
 	return iam
 
-def create_credentials(new_user):
+def create_credentials(new_user,iam):
 	#aqui creo la password
 	contrasena = generateSecureRandomString(12)
 
