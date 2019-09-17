@@ -76,3 +76,23 @@ def read_template(filename):
     return Template(template_file_content)
 
 
+def aws_connection(role_arn):
+	sts=boto3.client('sts')
+	response = sts.assume_role(
+    	RoleArn=role_arn,
+    	RoleSessionName='jenkins-new-user'
+	)
+
+	access_key_id = response['Credentials']['AccessKeyId']
+	secret_access_key = response['Credentials']['SecretAccessKey']
+	session_token = response['Credentials']['SessionToken']
+
+	iam = boto3.client(
+    	'iam',
+    	aws_access_key_id=access_key_id,
+    	aws_secret_access_key=secret_access_key,
+    	aws_session_token=session_token,
+    	region_name='eu-west-1'
+	)
+
+	return iam
