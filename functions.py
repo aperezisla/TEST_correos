@@ -33,7 +33,7 @@ def get_entorno(stage):
     elif stage == 'pro':
         return 'producción'
     else:
-        print('get_entorno_ Stage can only be dev, int, pro or opt')
+        print('Stage can only be dev, int, pro or opt')
         sys.exit(1)
 
 def get_loginurl(stage):
@@ -46,7 +46,7 @@ def get_loginurl(stage):
     elif stage == 'pro':
         return 'na-pro'
     else:
-        print('get_loginurl Stage can only be dev, int, pro or opt')
+        print('Stage can only be dev, int, pro or opt')
         sys.exit(1)
 
 
@@ -60,7 +60,7 @@ def get_role(stage):
     elif stage == 'pro':
         return 'arn:aws:iam::486960344036:role/pro-na-delegated-jenkins'
     else:
-        print('get_role :Stage can only be dev, int, pro or opt')
+        print('Stage can only be dev, int, pro or opt')
         sys.exit(1)
 
 
@@ -76,118 +76,3 @@ def read_template(filename):
     return Template(template_file_content)
 
 
-def get_accounts(rol):
-	if rol == '1':
-		#Desarrollador global
-		#Se crea cuenta en dev y pro
-		return (1,0,1,0)
-	elif rol == '2':
-		#Desarrollador (caso de uso)
-		#Depende del caso de uso, se asignan diferentes grupos al usuario
-		#Se crea cuenta en dev
-		return (0,0,1,0)
-	elif rol == '3':
-		#Desarrollador avanzado de Tableau (caso de uso)
-		#Depende del caso de uso, se asignan diferentes grupos al usuario
-		#Se crea cuenta en pro y dev
-		return (1,0,1,0)
-	elif rol == '4':
-		#Responsable de área usuaria (área)
-		#Se crea cuenta en pro
-		return (1,0,0,0)
-	elif rol == '5':
-		#Engineering
-		#Se crea cuenta en pro, dev, int y opt
-		return (1,1,1,1)
-	elif rol == '6':
-		#Engineering Manager
-		#Se crea cuenta en pro, dev, int y opt
-		return (1,1,1,1)
-	else: 
-		return (0,0,0,0)
-
-
-def coger_role(cuentas_a_crear,new_user,user,password,address,stage):
-	if(cuentas_a_crear[0] == 1):
-		#Se crea cuenta en pro
-		pass
-	if(cuentas_a_crear[1] == 1):
-		#Se crea cuenta en int
-		role_arn='arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
-		sts=boto3.client('sts')
-		response = sts.assume_role(
-    		RoleArn=role_arn,
-    		RoleSessionName='jenkins-new-user'
-		)
-		
-		access_key_id = response['Credentials']['AccessKeyId']
-		secret_access_key = response['Credentials']['SecretAccessKey']
-		session_token = response['Credentials']['SessionToken']
-
-		iam = boto3.client(
-    		'iam',
-    		aws_access_key_id=access_key_id,
-    		aws_secret_access_key=secret_access_key,
-    		aws_session_token=session_token,
-    		region_name='eu-west-1'
-		)
-
-
-		# Se crea el usuario
-		response = iam.create_user(
-    		UserName=new_user
-		)
-
-		#Le añado a los dos grupos: 
-		response = iam.add_user_to_group(
-    		GroupName='BasicIAM',
-   			UserName=new_user
-		)
-
-		response = iam.add_user_to_group(
-   	 		GroupName='ForceMFA',
-    		UserName=new_user
-		)
-
-		#FALTA AÑADIR A LOS GRUPOS EN FUNCION DEL CASO DE USO
-
-		#aqui creo la password
-		contrasena = functions.generateSecureRandomString(12)
-
-		response = iam.create_login_profile(
-    		UserName=new_user,
-    		Password=contrasena,
-    		PasswordResetRequired=True
-    	)
-
-		#VOY A CREAR LAS CREDENCIALES
-		print("creo las credenciales")
-		response = iam.create_access_key(
-    		UserName=new_user,
-		)
-
-		data = response['AccessKey']
-		data.pop('Status')
-		data.pop('CreateDate')
-		data['Password'] = contrasena
-		data['ConsoleLoginLink']='https://na-int.signin.aws.amazon.com/console'
-		with open('credentials.csv','w') as f:
-    		for key in data.keys():
-        		f.write("%s,%s\n"%(key,data[key]))
-
-		print("el csv se ha creado")
-		print("me meto en las funciones")
-
-		print("ahora se manda el primer correo")
-		emails_smtp.send_email1(user,password,address,new_user,stage)
-
-		print("ahora mando el segundo correo con las credenciales")
-		emails_smtp.send_email2(user,password,address,new_user,stage)
-		print("se han mandado ambos correos")
-
-	if(cuentas_a_crear[2] == 1):
-		#Se crea cuenta en dev
-		pass
-	if(cuentas_a_crear[3] == 1):
-		#Se crea cuenta en opt
-		pass
