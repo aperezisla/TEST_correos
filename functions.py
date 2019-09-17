@@ -33,7 +33,7 @@ def get_entorno(stage):
     elif stage == 'pro':
         return 'producción'
     else:
-        print('Stage can only be dev, int, pro or opt')
+        print('Entorno: Stage can only be dev, int, pro or opt')
         sys.exit(1)
 
 def get_loginurl(stage):
@@ -46,7 +46,7 @@ def get_loginurl(stage):
     elif stage == 'pro':
         return 'na-pro'
     else:
-        print('Stage can only be dev, int, pro or opt')
+        print('Login Stage can only be dev, int, pro or opt')
         sys.exit(1)
 
 
@@ -60,7 +60,7 @@ def get_role(stage):
     elif stage == 'pro':
         return 'arn:aws:iam::486960344036:role/pro-na-delegated-jenkins'
     else:
-        print('Stage can only be dev, int, pro or opt')
+        print('role: Stage can only be dev, int, pro or opt')
         sys.exit(1)
 
 
