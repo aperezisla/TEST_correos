@@ -99,7 +99,7 @@ def aws_connection(role_arn):
 
 def create_credentials(new_user):
 	#aqui creo la password
-	contrasena = functions.generateSecureRandomString(12)
+	contrasena = generateSecureRandomString(12)
 
 	response = iam.create_login_profile(
 		UserName=new_user,
