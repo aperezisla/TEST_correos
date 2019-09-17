@@ -11,6 +11,7 @@ import os
 import sys
 import string
 import random
+import emails_smtp
 
 
 def get_name(new_user):
