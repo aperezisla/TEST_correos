@@ -22,11 +22,8 @@ user=sys.argv[7]
 password=sys.argv[8]
 address=sys.argv[10]
 
-#print(rolecito)
-
 accounts=functions.coger_role(rol_user)
-print(accounts)
-functions.assign_role_arn(accounts,user,password,address,new_user) 
+functions.assign_role_arn(accounts,user,password,address,new_user,rol_user) 
 print('final')
 #role_arn=functions.get_role(stage)
 # iam=functions.aws_connection(role_arn)

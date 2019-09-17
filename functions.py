@@ -150,8 +150,28 @@ def coger_role(rol_user):
 		#Se crea cuenta en pro,int,dev y opt
 		return (1,1,1,1)
 
+def assign_basicforce(iam,new_user):
+	#Le añado a los dos grupos: 
+	response = iam.add_user_to_group(
+		GroupName='BasicIAM',
+		UserName=new_user
+	)
 
-def assign_role_arn(accounts,user,password,address,new_user):
+	response = iam.add_user_to_group(
+		GroupName='ForceMFA',
+		UserName=new_user
+	)
+
+def assign_groups(iam,stage,rol_user,new_user):
+	#if rol_user == '1':
+	#if rol_user == '2':
+	#if rol_user == '3':
+	#if rol_user == '4':
+	if rol_user == '5':
+			assign_basicforce(iam,new_user)
+	#if rol_user == '6':
+
+def assign_role_arn(accounts,user,password,address,new_user,rol_user):
 	#if accounts[0] == 1:
 		#Se crea cuenta en pro
 		#pass
@@ -168,16 +188,17 @@ def assign_role_arn(accounts,user,password,address,new_user):
 			UserName=new_user
 		)
 
-		#Le añado a los dos grupos: 
-		response = iam.add_user_to_group(
-			GroupName='BasicIAM',
-			UserName=new_user
-		)
+		assign_groups(iam,stage,rol_user,new_user)
+		# #Le añado a los dos grupos: 
+		# response = iam.add_user_to_group(
+		# 	GroupName='BasicIAM',
+		# 	UserName=new_user
+		# )
 
-		response = iam.add_user_to_group(
-			GroupName='ForceMFA',
-			UserName=new_user
-		)
+		# response = iam.add_user_to_group(
+		# 	GroupName='ForceMFA',
+		# 	UserName=new_user
+		# )
 
 		create_credentials(new_user,iam)
 
