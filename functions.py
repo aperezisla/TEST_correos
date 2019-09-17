@@ -151,9 +151,9 @@ def coger_role(rol_user):
 
 
 def assign_role_arn(accounts,user,password,address,new_user):
-	if accounts[0] == '1':
+	#if accounts[0] == '1':
 		#Se crea cuenta en pro
-		pass
+		#pass
 	if accounts[1] == '1':
 		stage = 'int'
 		#Se crea cuenta en int
