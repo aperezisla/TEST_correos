@@ -154,11 +154,13 @@ def assign_role_arn(accounts,user,password,address,new_user):
 	#if accounts[0] == '1':
 		#Se crea cuenta en pro
 		#pass
+	print("dentro de la funcion")
 	if accounts[1] == '1':
 		stage = 'int'
+		print(stage)
 		#Se crea cuenta en int
 		role_arn = 'arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
-		iam=functions.aws_connection(role_arn)
+		iam=aws_connection(role_arn)
 
 		# Se crea el usuario
 		response = iam.create_user(
