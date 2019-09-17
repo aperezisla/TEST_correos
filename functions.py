@@ -96,3 +96,28 @@ def aws_connection(role_arn):
 	)
 
 	return iam
+
+def create_credentials(new_user):
+	#aqui creo la password
+	contrasena = functions.generateSecureRandomString(12)
+
+	response = iam.create_login_profile(
+    	UserName=new_user,
+    	Password=contrasena,
+    	PasswordResetRequired=True
+    )
+
+	#VOY A CREAR LAS CREDENCIALES
+	print("creo las credenciales")
+	response = iam.create_access_key(
+   		UserName=new_user,
+	)
+
+	data = response['AccessKey']
+	data.pop('Status')
+	data.pop('CreateDate')
+	data['Password'] = contrasena
+	data['ConsoleLoginLink']='https://na-int.signin.aws.amazon.com/console'
+	with open('credentials.csv','w') as f:
+    	for key in data.keys():
+        	f.write("%s,%s\n"%(key,data[key]))
