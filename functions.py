@@ -151,10 +151,10 @@ def coger_role(rol_user):
 
 
 def assign_role_arn(accounts,user,password,address,new_user):
-	if accounts[0] == 1:
+	if accounts[0] == '1':
 		#Se crea cuenta en pro
 		pass
-	if accounts[1] == 1:
+	if accounts[1] == '1':
 		stage = 'int'
 		#Se crea cuenta en int
 		role_arn = 'arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
@@ -188,9 +188,9 @@ def assign_role_arn(accounts,user,password,address,new_user):
 		emails_smtp.send_email2(user,password,address,new_user,stage)
 		print("se han mandado ambos correos")
 		
-	if accounts[2] == 1:
+	if accounts[2] == '1':
 		#Se crea cuenta en dev
 		pass
-	if accounts[3] == 1:
+	if accounts[3] == '1':
 		#Se crea cuenta en opt
 		pass
