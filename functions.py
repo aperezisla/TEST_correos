@@ -119,5 +119,5 @@ def create_credentials(new_user):
 	data['Password'] = contrasena
 	data['ConsoleLoginLink']='https://na-int.signin.aws.amazon.com/console'
 	with open('credentials.csv','w') as f:
-    	for key in data.keys():
-        	f.write("%s,%s\n"%(key,data[key]))
+        for key in data.keys():
+            f.write("%s,%s\n"%(key,data[key]))
