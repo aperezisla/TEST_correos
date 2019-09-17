@@ -127,27 +127,27 @@ def coger_role(rol_user):
 	if rol_user == '1':
 		#Desarrollador global
 		#Se crea cuenta en pro y dev
-		return [1,0,1,0]
+		return (1,0,1,0)
 	if rol_user == '2':
 		#Desarrollador (caso de uso)
 		#Se crea cuenta en dev
-		return [0,0,1,0]
+		return (0,0,1,0)
 	if rol_user == '3':
 		#Desarrollador avanzado de Tableau (caso de uso)
 		#Se crea cuenta en pro y dev
-		return [1,0,1,0]
+		return (1,0,1,0)
 	if rol_user == '4':
 		#Responsable de area usuaria (area)
 		#Se crea cuenta en pro
-		return [1,0,0,0]
+		return (1,0,0,0)
 	if rol_user == '5':
 		#Engineering
 		#Se crea cuenta en pro,int,dev y opt
-		return [1,1,1,1]
+		return (1,1,1,1)
 	if rol_user == '6':
 		#Engineering Manager
 		#Se crea cuenta en pro,int,dev y opt
-		return [1,1,1,1]
+		return (1,1,1,1)
 
 
 def assign_role_arn(accounts,user,password,address,new_user):
