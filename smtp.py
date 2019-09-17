@@ -14,13 +14,15 @@ import random
 import functions
 import emails_smtp
 
-
+rolecito = sys.argv[2]
 #Hacer todos los casos, mejor coger el rol del usuario a crear
-stage = sys.argv[2]
-new_user = sys.argv[4]
-user=sys.argv[5]
-password=sys.argv[6]
-address=sys.argv[8]
+stage = sys.argv[4]
+new_user = sys.argv[6]
+user=sys.argv[7]
+password=sys.argv[8]
+address=sys.argv[10]
+
+print(rolecito)
 
 role_arn=functions.get_role(stage)
 iam=functions.aws_connection(role_arn)
