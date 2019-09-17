@@ -16,14 +16,15 @@ import emails_smtp
 
 rol_user = sys.argv[2]
 #Hacer todos los casos, mejor coger el rol del usuario a crear
-stage = sys.argv[4]
+#stage = sys.argv[4]
+caso_de_uso = sys.argv[4]
 new_user = sys.argv[6]
 user=sys.argv[7]
 password=sys.argv[8]
 address=sys.argv[10]
 
 accounts=functions.coger_role(rol_user)
-functions.assign_role_arn(accounts,user,password,address,new_user,rol_user) 
+functions.assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso) 
 print('final')
 #role_arn=functions.get_role(stage)
 # iam=functions.aws_connection(role_arn)
