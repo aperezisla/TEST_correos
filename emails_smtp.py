@@ -18,7 +18,9 @@ def send_email1(user,password,address,new_user,stage):
     msg = MIMEMultipart('alternative')
     sender = 'no-reply@na.telefonicadev.com'
     sender_name = 'na-engineering'
-    cc='andreap.isla97@gmail.com'
+    cc=['andreap.isla97@gmail.com']
+    mailto=['andrea.perezisla.practicas@telefonica.com']
+    emails=mailto + cc
     smtp_host='email-smtp.eu-west-1.amazonaws.com'
     smtp_port=587
     entorno=functions.get_entorno(stage)
@@ -26,8 +28,7 @@ def send_email1(user,password,address,new_user,stage):
     nombre=functions.get_name(new_user)
     msg['Subject'] = 'Acceso a AWS Network Analytics entorno de '+ entorno
     msg['From'] = email.utils.formataddr((sender_name, sender))
-    #msg['To'] =address
-    addresses = address + cc
+    msg['To'] =address
     message_template = functions.read_template('mensaje1.txt')
     message = message_template.safe_substitute(name=nombre, entorno=stage, loginurl=loginurl, user_name=new_user)
 
@@ -39,7 +40,7 @@ def send_email1(user,password,address,new_user,stage):
         server.starttls()
         server.ehlo()
         server.login(user, password)
-        server.sendmail(sender, addresses, msg.as_string())
+        server.sendmail(sender, emails, msg.as_string())
         server.close()
         print('Mail enviado satisfactoriamente')
     except Exception as e:
