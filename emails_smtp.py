@@ -26,14 +26,10 @@ def send_email1(user,password,address,new_user,stage):
     nombre=functions.get_name(new_user)
     msg['Subject'] = 'Acceso a AWS Network Analytics entorno de '+ entorno
     msg['From'] = email.utils.formataddr((sender_name, sender))
-    msg['To'] =address + ',' + cc
+    msg['To'] =address + [cc]
     message_template = functions.read_template('mensaje1.txt')
     message = message_template.safe_substitute(name=nombre, entorno=stage, loginurl=loginurl, user_name=new_user)
-    #if cc is not None:
-        #msg['CC'] = ','.join(cc)
-        #recipients = to + cc
-    #else:
-        #recipients = to
+
     msg.attach(MIMEText(message, 'plain'))
     #msg.attach(MIMEText(body_html, 'html', 'UTF-8'))
     try:
