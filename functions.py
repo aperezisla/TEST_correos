@@ -109,6 +109,7 @@ def create_credentials(new_user,iam,rol_user):
 					Password=contrasena,
 					PasswordResetRequired=True
 				)
+				print('la contraseña se ha creado correctamente')
 				break
 			except Exception:
 				print('La contraseña no es valida, se crea otra vez')
