@@ -26,7 +26,8 @@ def send_email1(user,password,address,new_user,stage):
     nombre=functions.get_name(new_user)
     msg['Subject'] = 'Acceso a AWS Network Analytics entorno de '+ entorno
     msg['From'] = email.utils.formataddr((sender_name, sender))
-    msg['To'] =address
+    #msg['To'] =address
+    addresses = address + cc
     message_template = functions.read_template('mensaje1.txt')
     message = message_template.safe_substitute(name=nombre, entorno=stage, loginurl=loginurl, user_name=new_user)
 
@@ -38,7 +39,7 @@ def send_email1(user,password,address,new_user,stage):
         server.starttls()
         server.ehlo()
         server.login(user, password)
-        server.sendmail(sender, msg['To'], msg.as_string())
+        server.sendmail(sender, addresses, msg.as_string())
         server.close()
         print('Mail enviado satisfactoriamente')
     except Exception as e:
