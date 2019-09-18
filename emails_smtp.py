@@ -18,8 +18,9 @@ def send_email1(user,password,address,new_user,stage):
     msg = MIMEMultipart('alternative')
     sender = 'no-reply@na.telefonicadev.com'
     sender_name = 'na-engineering'
+    #Cambiar esto de aqui abajo cuando funcione ok
     cc=['andreap.isla97@gmail.com']
-    mailto=['andrea.perezisla.practicas@telefonica.com']
+    mailto=[address]
     emails=mailto + cc
     smtp_host='email-smtp.eu-west-1.amazonaws.com'
     smtp_port=587
