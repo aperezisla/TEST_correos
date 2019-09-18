@@ -98,15 +98,16 @@ def aws_connection(role_arn):
 
 	return iam
 
-def create_credentials(new_user,iam):
+def create_credentials(new_user,iam,rol_user):
 	#aqui creo la password
-	contrasena = generateSecureRandomString(12)
+	if rol_user != '4': 
+		contrasena = generateSecureRandomString(12)
 
-	response = iam.create_login_profile(
-		UserName=new_user,
-		Password=contrasena,
-		PasswordResetRequired=True
-	)
+		response = iam.create_login_profile(
+			UserName=new_user,
+			Password=contrasena,
+			PasswordResetRequired=True
+		)
 
 	#VOY A CREAR LAS CREDENCIALES
 	print("creo las credenciales")
@@ -121,27 +122,8 @@ def create_credentials(new_user,iam):
 	data['ConsoleLoginLink']='https://na-int.signin.aws.amazon.com/console'
 	with open('credentials.csv','w') as f:
 		f.write("%s,%s\n"%('UserName',data['UserName']))
-		f.write("%s,%s\n"%('Password',data['Password']))
-		f.write("%s,%s\n"%('AccessKeyId',data['AccessKeyId']))
-		f.write("%s,%s\n"%('SecretAccessKey',data['SecretAccessKey']))
-		f.write("%s,%s\n"%('ConsoleLoginLink',data['ConsoleLoginLink']))
-
-def create_credentials_noconsole(new_user,iam):
-
-	#VOY A CREAR LAS CREDENCIALES
-	print("creo las credenciales")
-	response = iam.create_access_key(
-		UserName=new_user,
-	)
-
-	data = response['AccessKey']
-	data.pop('Status')
-	data.pop('CreateDate')
-	#data['Password'] = contrasena
-	data['ConsoleLoginLink']='https://na-int.signin.aws.amazon.com/console'
-	with open('credentials.csv','w') as f:
-		f.write("%s,%s\n"%('UserName',data['UserName']))
-		#f.write("%s,%s\n"%('Password',data['Password']))
+		if rol_user != '4':
+			f.write("%s,%s\n"%('Password',data['Password']))
 		f.write("%s,%s\n"%('AccessKeyId',data['AccessKeyId']))
 		f.write("%s,%s\n"%('SecretAccessKey',data['SecretAccessKey']))
 		f.write("%s,%s\n"%('ConsoleLoginLink',data['ConsoleLoginLink']))
@@ -268,13 +250,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		)
 
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-		if rol_user != '4':
-			#El rol 4 no tiene acceso a la consola
-			create_credentials(new_user,iam)
-		else:
-			create_credentials_noconsole(new_user,iam)
-			password=''
-			#No tiene password, solo el par de acces key y secret access key
+		create_credentials(new_user,iam,rol_user)
 
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
@@ -291,13 +267,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		)
 
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-		if rol_user != '4':
-			#El rol 4 no tiene acceso a la consola
-			create_credentials(new_user,iam)
-		else:
-			create_credentials_noconsole(new_user,iam)
-			password=''
-			#No tiene password, solo el par de acces key y secret access key
+		create_credentials(new_user,iam)
 
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
@@ -315,13 +285,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		)
 
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-		if rol_user != '4':
-			#El rol 4 no tiene acceso a la consola
-			create_credentials(new_user,iam)
-		else:
-			create_credentials_noconsole(new_user,iam)
-			password=''
-			#No tiene password, solo el par de acces key y secret access key
+		create_credentials(new_user,iam)
 
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
@@ -338,13 +302,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		)
 
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-		if rol_user != '4':
-			#El rol 4 no tiene acceso a la consola
-			create_credentials(new_user,iam)
-		else:
-			create_credentials_noconsole(new_user,iam)
-			password=''
-			#No tiene password, solo el par de acces key y secret access key
+		create_credentials(new_user,iam)
 
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
