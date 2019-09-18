@@ -26,7 +26,7 @@ address=sys.argv[12]
 
 accounts=functions.coger_role(rol_user,cuenta_pro)
 if accounts == (0,0,0,0):
-	print('[INFO] No es necesario crear ninguna cuenta')
+	print('[INFO] No es necesario crear ninguna cuenta.')
 	sys.exit(1)
 functions.assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso) 
-print('[INFO] Finalizado con éxito la creación del usuario')
+print('[INFO] Finalizado con éxito.')

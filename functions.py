@@ -35,7 +35,7 @@ def get_entorno(stage):
 	elif stage == 'pro':
 		return 'producción'
 	else:
-		print('[ERROR] Entorno: Stage can only be dev, int, pro or opt')
+		print('[ERROR] Entorno: Stage can only be dev, int, pro or opt.')
 		sys.exit(1)
 
 def get_loginurl(stage):
@@ -48,7 +48,7 @@ def get_loginurl(stage):
 	elif stage == 'pro':
 		return 'na-pro'
 	else:
-		print('[ERROR] Login: Stage can only be dev, int, pro or opt')
+		print('[ERROR] Login: Stage can only be dev, int, pro or opt.')
 		sys.exit(1)
 
 
@@ -62,7 +62,7 @@ def get_role(stage):
 	elif stage == 'pro':
 		return 'arn:aws:iam::486960344036:role/pro-na-delegated-jenkins'
 	else:
-		print('[ERROR] Role: Stage can only be dev, int, pro or opt')
+		print('[ERROR] Role: Stage can only be dev, int, pro or opt.')
 		sys.exit(1)
 
 
@@ -110,10 +110,10 @@ def create_credentials(new_user,iam,rol_user):
 					Password=contrasena,
 					PasswordResetRequired=True
 				)
-				print('[INFO] La contraseña de acceso se ha creado correctamente')
+				print('[INFO] La contraseña de acceso se ha creado correctamente.')
 				break
 			except Exception:
-				print('[INFO] La contraseña no es válida, se crea de nuevo')
+				print('[INFO] La contraseña no es válida, se crea de nuevo.')
 
 	#print("creo las credenciales")
 	response = iam.create_access_key(
@@ -139,49 +139,57 @@ def coger_role(rol_user,cuenta_pro):
 	if rol_user == '1':
 		#Desarrollador global
 		#Se crea cuenta en dev
+		print('[INFO] Desarrollador global: ')
 		if cuenta_pro in ('S','s'):
 			#Tambien en pro
-			print('[INFO] Se crea también cuenta en pro por petición')
+			print('[INFO] Se crea también cuenta en pro por petición.')
 			return (1,0,1,0)
 		else:
-			print('[INFO] Se crea cuenta únicamente en dev')
+			print('[INFO] Se crea cuenta únicamente en dev.')
 			return (0,0,1,0)
 	if rol_user == '2':
 		#Desarrollador (caso de uso)
 		#Se crea cuenta en dev
+		print('[INFO] Desarrollador: ')
 		if cuenta_pro in ('S','s'):
 			#Tambien en pro
-			print('[INFO] Se crea también cuenta en pro por petición')
+			print('[INFO] Se crea también cuenta en pro por petición.')
 			return (1,0,1,0)
 		else:
-			print('[INFO] Se crea cuenta únicamente en dev')
+			print('[INFO] Se crea cuenta únicamente en dev.')
 			return (0,0,1,0)
 	if rol_user == '3':
 		#Desarrollador avanzado de Tableau (caso de uso)
 		#Se crea cuenta en dev
+		print('[INFO] Desarrollador avanzado de Tableau: ')
 		if cuenta_pro in ('S','s'):
 			#Tambien en pro
-			print('[INFO] Se crea también cuenta en pro por petición')
+			print('[INFO] Se crea también cuenta en pro por petición.')
 			return (1,0,1,0)
 		else:
-			print('[INFO] Se crea cuenta únicamente en dev')
+			print('[INFO] Se crea cuenta únicamente en dev.')
 			return (0,0,1,0)
 	if rol_user == '4':
 		#Responsable de area usuaria (area)
 		#Se crea cuenta en pro
+		print('[INFO] Responsable de área usuaria: ')
 		if cuenta_pro in ('S','s'):
-			print('[INFO] Se crea cuenta en pro por petición')
+			print('[INFO] Se crea cuenta en pro por petición.')
 			return (1,0,0,0)
 		else:
-			print('[INFO] No es necesario crear usuarios')
+			print('[INFO] No es necesario crear usuarios.')
 			return (0,0,0,0)
 	if rol_user == '5':
 		#Engineering
 		#Se crea cuenta en pro,int,dev y opt
+		print('[INFO] Engineering: ')
+		print('[INFO] Se crea cuenta en pro, int, dev y opt.')
 		return (1,1,1,1)
 	if rol_user == '6':
 		#Engineering Manager
 		#Se crea cuenta en pro,int,dev y opt
+		print('[INFO] Engineering Manager: ')
+		print('[INFO] Se crea cuenta en pro, int, dev y opt.')
 		return (1,1,1,1)
 
 def assign_basicforce(iam,new_user):
@@ -212,59 +220,83 @@ def assign_specific_policy(policy,iam,new_user):
 def assign_groups(iam,stage,rol_user,new_user,caso_de_uso):
 	if rol_user == '1':
 		assign_basicforce(iam,new_user)
+		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 		if stage == 'dev':
 			assign_specific_group('PowerDevelopers',iam,new_user)
+			print('[INFO] Asignado el grupo PowerDevelopers en su usuario dev')
 		if stage == 'pro':
 			assign_specific_group('NaDevGlobalDevPRO',iam,new_user)
+			print('[INFO] Asignado el grupo NaDevGlobalDevPRO en su usuario pro')
 	if rol_user == '2':
 		assign_basicforce(iam,new_user)
+		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 		if stage == 'dev':
 			if caso_de_uso == '1':
 				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
 				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
 				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
+				print('[INFO] Asignados los grupos NaDevPlantaExternaAssia, Hada y TOA en su usuario dev')
 				assign_specific_policy('NaDevPlantaExternaCrossAccountPolicy',iam,new_user)
+				print('[INFO] Asignada la política NaDevPlantaExternaCrossAccountPolicy en su usuario dev')
 			if caso_de_uso == '2':
 				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevPlantaExternaTOA en su usuario dev')
 			if caso_de_uso == '3':
 				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevPlantaExternaAssia en su usuario dev')
 			if caso_de_uso == '4':
 				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevPlantaExternaHada en su usuario dev')
 		if stage == 'pro':
 			if caso_de_uso == '1':
 				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
 				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
 				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
+				print('[INFO] Asignados los grupos NaDevPlantaExternaAssia, Hada y TOA en su usuario pro')
 	if rol_user == '3':
 		assign_basicforce(iam,new_user)
+		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 		if stage == 'dev':
 			if caso_de_uso == '2':
 				assign_specific_group('NaDevTableauPlantaExternaTOA',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaTOA en su usuario dev')
 			if caso_de_uso == '3':
 				assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaASSIA en su usuario dev')
 			if caso_de_uso == '4':
 				assign_specific_group('NaDevTableauPlantaExternaHADA',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaHADA en su usuario dev')
 			if caso_de_uso == '5':
 				assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevTableauPlantaInternaASTRO en su usuario dev')
 			if caso_de_uso == '6':
 				assign_specific_group('NaDevTableauOpsPlatGlob',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevTableauOpsPlatGlob en su usuario dev')
 		if stage == 'pro':
 			if caso_de_uso == '2':
 				assign_specific_group('NaDevTableauPlantaExternaTOA',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaTOA en su usuario pro')
 			if caso_de_uso == '3':
 				assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaASSIA en su usuario pro')
 			if caso_de_uso == '4':
 				assign_specific_group('NaDevTableauPlantaExternaHADA',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaHADA en su usuario pro')
 			if caso_de_uso == '5':
 				assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevTableauPlantaInternaASTRO en su usuario pro')
 			if caso_de_uso == '6':
 				assign_specific_group('NaDevTableauOpsPlatGlob',iam,new_user)
+				print('[INFO] Asignado el grupo NaDevTableauOpsPlatGlob en su usuario pro')
 	if rol_user == '4':
 		assign_basicforce(iam,new_user)
+		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 	if rol_user == '5':
 		assign_basicforce(iam,new_user)
+		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 	if rol_user == '6':
 		assign_basicforce(iam,new_user)
+		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 
 def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso):
 	if accounts[0] == 1:
@@ -284,6 +316,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 			else:
 				print('[ERROR] Error inesperado: %s' % e) 
 
+		print('[INFO]Usuario creado correctamente en '+stage)
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)
 
@@ -306,6 +339,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 			else:
 				print('[ERROR] Error inesperado: %s' % e) 
 
+		print('[INFO]Usuario creado correctamente en '+stage)
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)
 
@@ -329,6 +363,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 			else:
 				print('[ERROR] Error inesperado: %s' % e) 
 
+		print('[INFO]Usuario creado correctamente en '+stage)
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)
 
@@ -350,7 +385,8 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 				print('[ERROR] El usuario ya existe')
 			else:
 				print('[ERROR] Error inesperado: %s' % e) 
-
+				
+		print('[INFO]Usuario creado correctamente en '+stage)
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)
 
