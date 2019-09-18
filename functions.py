@@ -118,7 +118,8 @@ def create_credentials(new_user,iam,rol_user):
 	data = response['AccessKey']
 	data.pop('Status')
 	data.pop('CreateDate')
-	data['Password'] = contrasena
+	if rol_user != '4':
+		data['Password'] = contrasena
 	data['ConsoleLoginLink']='https://na-int.signin.aws.amazon.com/console'
 	with open('credentials.csv','w') as f:
 		f.write("%s,%s\n"%('UserName',data['UserName']))
