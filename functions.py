@@ -120,8 +120,11 @@ def create_credentials(new_user,iam):
 	data['Password'] = contrasena
 	data['ConsoleLoginLink']='https://na-int.signin.aws.amazon.com/console'
 	with open('credentials.csv','w') as f:
-		for key in data.keys():
-			f.write("%s,%s\n"%(key,data[key]))
+		f.write("%s,%s\n"%('UserName',data['UserName']))
+		f.write("%s,%s\n"%('Password',data['Password']))
+		f.write("%s,%s\n"%('AccessKeyId',data['AccessKeyId']))
+		f.write("%s,%s\n"%('SecretAccessKey',data['SecretAccessKey']))
+		f.write("%s,%s\n"%('ConsoleLoginLink',data['ConsoleLoginLink']))
 
 
 def coger_role(rol_user):
@@ -162,22 +165,112 @@ def assign_basicforce(iam,new_user):
 		UserName=new_user
 	)
 
+def assign_specific_group(group,iam,new_user):
+	response=iam.add_user_to_group(
+		GroupName=group,
+		UserName=new_user
+	)
+
+
+
 def assign_groups(iam,stage,rol_user,new_user,caso_de_uso):
-	#if rol_user == '1':
-	#if rol_user == '2':
-	#if rol_user == '3':
-	#if rol_user == '4':
+	if rol_user == '1':
+		assign_basicforce(iam,new_user)
+		if stage == 'dev':
+			assign_specific_group('PowerDevelopers',iam,new_user)
+		if stage == 'pro':
+			#ASIGNAR GRUPO PRO
+			assign_specific_group('NaDevGlobalDevPRO',iam,new_user)
+	if rol_user == '2':
+		assign_basicforce(iam,new_user)
+		if stage == 'dev':
+			if caso_de_uso == '1':
+				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
+				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
+				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
+				#ASIGNAR POLITICA
+			if caso_de_uso == '2':
+				#ASIGNAR GRUPOOOO
+				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
+			if caso_de_uso == '3':
+				#ASIGNAR GRUPOOOO
+				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
+			if caso_de_uso == '4':
+				#ASIGNAR GRUPOOOO
+				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
+		if stage == 'pro':
+			if caso_de_uso == '1':
+				#ASIGNAR GRUPO CORRESPONDIENTE
+				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
+				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
+				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
+	if rol_user == '3':
+		assign_basicforce(iam,new_user)
+		if stage == 'dev':
+			if caso_de_uso == '2':
+				#ASIGNAR GRUPO CORRESPONDIENTE
+				assign_specific_group('NaDevTableauPlantaExternaTOA',iam,new_user)
+			if caso_de_uso == '3':
+				#ASIGNAR GRUPOOOO
+				assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,new_user)
+			if caso_de_uso == '4':
+				#ASIGNAR GRUPOOOO
+				assign_specific_group('NaDevTableauPlantaExternaHADA',iam,new_user)
+			if caso_de_uso == '5':
+				#ASIGNAR GRUPOOOO
+				assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,new_user)
+			if caso_de_uso == '6':
+				#ASIGNAR GRUPO
+				assign_specific_group('NaDevTableauOpsPlatGlob',iam,new_user)
+		if stage == 'pro':
+			if caso_de_uso == '2':
+				#ASIGNAR GRUPO CORRESPONDIENTE
+				assign_specific_group('NaDevTableauPlantaExternaTOA',iam,new_user)
+			if caso_de_uso == '3':
+				#ASIGNAR GRUPOOOO
+				assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,new_user)
+			if caso_de_uso == '4':
+				#ASIGNAR GRUPOOOO
+				assign_specific_group('NaDevTableauPlantaExternaHADA',iam,new_user)
+			if caso_de_uso == '5':
+				#ASIGNAR GRUPOOOO
+				assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,new_user)
+			if caso_de_uso == '6':
+				#ASIGNAR GRUPO
+				assign_specific_group('NaDevTableauOpsPlatGlob',iam,new_user)
+	if rol_user == '4':
+		assign_basicforce(iam,new_user)
 	if rol_user == '5':
-			assign_basicforce(iam,new_user)
-	#if rol_user == '6':
+		assign_basicforce(iam,new_user)
+	if rol_user == '6':
+		assign_basicforce(iam,new_user)
 
 def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso):
-	#if accounts[0] == 1:
+	if accounts[0] == 1:
 		#Se crea cuenta en pro
-		#pass
+		stage = 'pro'
+		role_arn = 'arn:aws:iam::486960344036:role/pro-na-delegated-jenkins'
+		iam=aws_connection(role_arn)
+
+		# Se crea el usuario
+		response = iam.create_user(
+			UserName=new_user
+		)
+
+		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
+		create_credentials(new_user,iam)
+
+		#print("el csv se ha creado")
+		#print("me meto en las funciones")
+
+		#print("ahora se manda el primer correo")
+		emails_smtp.send_email1(user,password,address,new_user,stage)
+
+		#print("ahora mando el segundo correo con las credenciales")
+		emails_smtp.send_email2(user,password,address,new_user,stage)
+		#print("se han mandado ambos correos")
 	if accounts[1] == 1:
 		stage = 'int'
-		print(stage)
 		#Se crea cuenta en int
 		role_arn = 'arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
 		iam=aws_connection(role_arn)
@@ -190,19 +283,60 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam)
 
-		print("el csv se ha creado")
-		print("me meto en las funciones")
+		#print("el csv se ha creado")
+		#print("me meto en las funciones")
 
-		print("ahora se manda el primer correo")
+		#print("ahora se manda el primer correo")
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
-		print("ahora mando el segundo correo con las credenciales")
+		#print("ahora mando el segundo correo con las credenciales")
 		emails_smtp.send_email2(user,password,address,new_user,stage)
-		print("se han mandado ambos correos")
+		#print("se han mandado ambos correos")
 		
 	if accounts[2] == 1:
 		#Se crea cuenta en dev
-		pass
+		stage = 'dev'
+		role_arn = 'arn:aws:iam::363896548138:role/dev-na-delegated-jenkins'
+		iam=aws_connection(role_arn)
+
+		# Se crea el usuario
+		response = iam.create_user(
+			UserName=new_user
+		)
+
+		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
+		create_credentials(new_user,iam)
+
+		#print("el csv se ha creado")
+		#print("me meto en las funciones")
+
+		#print("ahora se manda el primer correo")
+		emails_smtp.send_email1(user,password,address,new_user,stage)
+
+		#print("ahora mando el segundo correo con las credenciales")
+		emails_smtp.send_email2(user,password,address,new_user,stage)
+		#print("se han mandado ambos correos")
 	if accounts[3] == 1:
 		#Se crea cuenta en opt
-		pass
+		stage = 'opt'
+		role_arn = 'arn:aws:iam::416481324865:role/pro-opt-delegated-jenkins'
+		iam=aws_connection(role_arn)
+
+		# Se crea el usuario
+		response = iam.create_user(
+			UserName=new_user
+		)
+
+		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
+		create_credentials(new_user,iam)
+
+		#print("el csv se ha creado")
+		#print("me meto en las funciones")
+
+		#print("ahora se manda el primer correo")
+		emails_smtp.send_email1(user,password,address,new_user,stage)
+
+		#print("ahora mando el segundo correo con las credenciales")
+		emails_smtp.send_email2(user,password,address,new_user,stage)
+		#print("se han mandado ambos correos")
+		
