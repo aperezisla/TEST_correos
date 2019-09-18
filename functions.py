@@ -164,7 +164,7 @@ def coger_role(rol_user,cuenta_pro,caso_de_uso):
 	if rol_user == '2':
 		#Desarrollador (caso de uso)
 		#Se crea cuenta en dev
-		print('[INFO] Desarrollador ('+get_casodeuso(caso_de_uso)+': ')
+		print('[INFO] Desarrollador ('+get_casodeuso(caso_de_uso)+'): ')
 		if cuenta_pro in ('S','s'):
 			#Tambien en pro
 			print('[INFO] Se crea también cuenta en pro por petición.')
@@ -175,7 +175,7 @@ def coger_role(rol_user,cuenta_pro,caso_de_uso):
 	if rol_user == '3':
 		#Desarrollador avanzado de Tableau (caso de uso)
 		#Se crea cuenta en dev
-		print('[INFO] Desarrollador avanzado de Tableau ('+get_casodeuso(caso_de_uso)+': ')
+		print('[INFO] Desarrollador avanzado de Tableau ('+get_casodeuso(caso_de_uso)+'): ')
 		if cuenta_pro in ('S','s'):
 			#Tambien en pro
 			print('[INFO] Se crea también cuenta en pro por petición.')
