@@ -171,6 +171,11 @@ def assign_specific_group(group,iam,new_user):
 		UserName=new_user
 	)
 
+def assign_specific_policy(policy,iam,new_user):
+	response=iam.attach_user_policy(
+		UserName=new_user,
+		PolicyArn=policy
+	)
 
 
 def assign_groups(iam,stage,rol_user,new_user,caso_de_uso):
@@ -179,7 +184,6 @@ def assign_groups(iam,stage,rol_user,new_user,caso_de_uso):
 		if stage == 'dev':
 			assign_specific_group('PowerDevelopers',iam,new_user)
 		if stage == 'pro':
-			#ASIGNAR GRUPO PRO
 			assign_specific_group('NaDevGlobalDevPRO',iam,new_user)
 	if rol_user == '2':
 		assign_basicforce(iam,new_user)
@@ -188,19 +192,15 @@ def assign_groups(iam,stage,rol_user,new_user,caso_de_uso):
 				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
 				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
 				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
-				#ASIGNAR POLITICA
+				assign_specific_policy('NaDevPlantaExternaCrossAccountPolicy',iam,new_user)
 			if caso_de_uso == '2':
-				#ASIGNAR GRUPOOOO
 				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
 			if caso_de_uso == '3':
-				#ASIGNAR GRUPOOOO
 				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
 			if caso_de_uso == '4':
-				#ASIGNAR GRUPOOOO
 				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
 		if stage == 'pro':
 			if caso_de_uso == '1':
-				#ASIGNAR GRUPO CORRESPONDIENTE
 				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
 				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
 				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
@@ -208,35 +208,25 @@ def assign_groups(iam,stage,rol_user,new_user,caso_de_uso):
 		assign_basicforce(iam,new_user)
 		if stage == 'dev':
 			if caso_de_uso == '2':
-				#ASIGNAR GRUPO CORRESPONDIENTE
 				assign_specific_group('NaDevTableauPlantaExternaTOA',iam,new_user)
 			if caso_de_uso == '3':
-				#ASIGNAR GRUPOOOO
 				assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,new_user)
 			if caso_de_uso == '4':
-				#ASIGNAR GRUPOOOO
 				assign_specific_group('NaDevTableauPlantaExternaHADA',iam,new_user)
 			if caso_de_uso == '5':
-				#ASIGNAR GRUPOOOO
 				assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,new_user)
 			if caso_de_uso == '6':
-				#ASIGNAR GRUPO
 				assign_specific_group('NaDevTableauOpsPlatGlob',iam,new_user)
 		if stage == 'pro':
 			if caso_de_uso == '2':
-				#ASIGNAR GRUPO CORRESPONDIENTE
 				assign_specific_group('NaDevTableauPlantaExternaTOA',iam,new_user)
 			if caso_de_uso == '3':
-				#ASIGNAR GRUPOOOO
 				assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,new_user)
 			if caso_de_uso == '4':
-				#ASIGNAR GRUPOOOO
 				assign_specific_group('NaDevTableauPlantaExternaHADA',iam,new_user)
 			if caso_de_uso == '5':
-				#ASIGNAR GRUPOOOO
 				assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,new_user)
 			if caso_de_uso == '6':
-				#ASIGNAR GRUPO
 				assign_specific_group('NaDevTableauOpsPlatGlob',iam,new_user)
 	if rol_user == '4':
 		assign_basicforce(iam,new_user)
@@ -260,15 +250,9 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam)
 
-		#print("el csv se ha creado")
-		#print("me meto en las funciones")
-
-		#print("ahora se manda el primer correo")
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
-		#print("ahora mando el segundo correo con las credenciales")
 		emails_smtp.send_email2(user,password,address,new_user,stage)
-		#print("se han mandado ambos correos")
 	if accounts[1] == 1:
 		stage = 'int'
 		#Se crea cuenta en int
@@ -283,15 +267,9 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam)
 
-		#print("el csv se ha creado")
-		#print("me meto en las funciones")
-
-		#print("ahora se manda el primer correo")
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
-		#print("ahora mando el segundo correo con las credenciales")
 		emails_smtp.send_email2(user,password,address,new_user,stage)
-		#print("se han mandado ambos correos")
 		
 	if accounts[2] == 1:
 		#Se crea cuenta en dev
@@ -307,15 +285,9 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam)
 
-		#print("el csv se ha creado")
-		#print("me meto en las funciones")
-
-		#print("ahora se manda el primer correo")
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
-		#print("ahora mando el segundo correo con las credenciales")
 		emails_smtp.send_email2(user,password,address,new_user,stage)
-		#print("se han mandado ambos correos")
 	if accounts[3] == 1:
 		#Se crea cuenta en opt
 		stage = 'opt'
@@ -330,13 +302,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam)
 
-		#print("el csv se ha creado")
-		#print("me meto en las funciones")
-
-		#print("ahora se manda el primer correo")
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
-		#print("ahora mando el segundo correo con las credenciales")
 		emails_smtp.send_email2(user,password,address,new_user,stage)
-		#print("se han mandado ambos correos")
 		
