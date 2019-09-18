@@ -14,6 +14,20 @@ import string
 import random
 import emails_smtp
 
+def get_casodeuso(caso_de_uso):
+	if caso_de_uso == '1':
+		return 'PLEXT'
+	if caso_de_uso == '2':
+		return 'PLEXT TOA'
+	if caso_de_uso == '3':
+		return 'PLEXT ASSIA'
+	if caso_de_uso == '4':
+		return 'PLEXT HADA'
+	if caso_de_uso == '5':
+		return 'ASTRO'
+	if caso_de_uso == '6':
+		return 'VIDEO Y PLATAFORMAS'
+
 
 def get_name(new_user):
 	real=''
@@ -135,7 +149,7 @@ def create_credentials(new_user,iam,rol_user):
 		f.write("%s,%s\n"%('ConsoleLoginLink',data['ConsoleLoginLink']))
 
 
-def coger_role(rol_user,cuenta_pro):
+def coger_role(rol_user,cuenta_pro,caso_de_uso):
 	if rol_user == '1':
 		#Desarrollador global
 		#Se crea cuenta en dev
@@ -150,7 +164,7 @@ def coger_role(rol_user,cuenta_pro):
 	if rol_user == '2':
 		#Desarrollador (caso de uso)
 		#Se crea cuenta en dev
-		print('[INFO] Desarrollador: ')
+		print('[INFO] Desarrollador ('+get_casodeuso(caso_de_uso)'): ')
 		if cuenta_pro in ('S','s'):
 			#Tambien en pro
 			print('[INFO] Se crea también cuenta en pro por petición.')
@@ -161,7 +175,7 @@ def coger_role(rol_user,cuenta_pro):
 	if rol_user == '3':
 		#Desarrollador avanzado de Tableau (caso de uso)
 		#Se crea cuenta en dev
-		print('[INFO] Desarrollador avanzado de Tableau: ')
+		print('[INFO] Desarrollador avanzado de Tableau ('+get_casodeuso(caso_de_uso)'): ')
 		if cuenta_pro in ('S','s'):
 			#Tambien en pro
 			print('[INFO] Se crea también cuenta en pro por petición.')
@@ -385,7 +399,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 				print('[ERROR] El usuario ya existe')
 			else:
 				print('[ERROR] Error inesperado: %s' % e) 
-				
+
 		print('[INFO]Usuario creado correctamente en '+stage)
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)

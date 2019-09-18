@@ -24,7 +24,7 @@ user=sys.argv[9]
 password=sys.argv[10]
 address=sys.argv[12]
 
-accounts=functions.coger_role(rol_user,cuenta_pro)
+accounts=functions.coger_role(rol_user,cuenta_pro,caso_de_uso)
 if accounts == (0,0,0,0):
 	print('[INFO] No es necesario crear ninguna cuenta.')
 	sys.exit(1)
