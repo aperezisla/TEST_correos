@@ -101,9 +101,9 @@ def aws_connection(role_arn):
 def create_credentials(new_user,iam,rol_user):
 	#aqui creo la password
 	if rol_user != '4': 
-		contrasena = generateSecureRandomString(12)
 		while True:
 			try:
+				contrasena = generateSecureRandomString(12)
 				response = iam.create_login_profile(
 					UserName=new_user,
 					Password=contrasena,
