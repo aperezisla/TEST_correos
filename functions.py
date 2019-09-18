@@ -6,6 +6,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 from string import Template
+from botocore.exceptions import ClientError
 import jinja2
 import os
 import sys
@@ -34,7 +35,7 @@ def get_entorno(stage):
 	elif stage == 'pro':
 		return 'producción'
 	else:
-		print('Entorno: Stage can only be dev, int, pro or opt')
+		print('[ERROR] Entorno: Stage can only be dev, int, pro or opt')
 		sys.exit(1)
 
 def get_loginurl(stage):
@@ -47,7 +48,7 @@ def get_loginurl(stage):
 	elif stage == 'pro':
 		return 'na-pro'
 	else:
-		print('Login Stage can only be dev, int, pro or opt')
+		print('[ERROR] Login: Stage can only be dev, int, pro or opt')
 		sys.exit(1)
 
 
@@ -61,7 +62,7 @@ def get_role(stage):
 	elif stage == 'pro':
 		return 'arn:aws:iam::486960344036:role/pro-na-delegated-jenkins'
 	else:
-		print('role: Stage can only be dev, int, pro or opt')
+		print('[ERROR] Role: Stage can only be dev, int, pro or opt')
 		sys.exit(1)
 
 
@@ -109,13 +110,12 @@ def create_credentials(new_user,iam,rol_user):
 					Password=contrasena,
 					PasswordResetRequired=True
 				)
-				print('la contraseña se ha creado correctamente')
+				print('[INFO] La contraseña de acceso se ha creado correctamente')
 				break
 			except Exception:
-				print('La contraseña no es valida, se crea otra vez')
+				print('[INFO] La contraseña no es válida, se crea de nuevo')
 
-	#VOY A CREAR LAS CREDENCIALES
-	print("creo las credenciales")
+	#print("creo las credenciales")
 	response = iam.create_access_key(
 		UserName=new_user,
 	)
@@ -135,23 +135,46 @@ def create_credentials(new_user,iam,rol_user):
 		f.write("%s,%s\n"%('ConsoleLoginLink',data['ConsoleLoginLink']))
 
 
-def coger_role(rol_user):
+def coger_role(rol_user,cuenta_pro):
 	if rol_user == '1':
 		#Desarrollador global
-		#Se crea cuenta en pro y dev
-		return (1,0,1,0)
+		#Se crea cuenta en dev
+		if cuenta_pro in ('S','s'):
+			#Tambien en pro
+			print('[INFO] Se crea también cuenta en pro por petición')
+			return (1,0,1,0)
+		else:
+			print('[INFO] Se crea cuenta únicamente en dev')
+			return (0,0,1,0)
 	if rol_user == '2':
 		#Desarrollador (caso de uso)
 		#Se crea cuenta en dev
-		return (0,0,1,0)
+		if cuenta_pro in ('S','s'):
+			#Tambien en pro
+			print('[INFO] Se crea también cuenta en pro por petición')
+			return (1,0,1,0)
+		else:
+			print('[INFO] Se crea cuenta únicamente en dev')
+			return (0,0,1,0)
 	if rol_user == '3':
 		#Desarrollador avanzado de Tableau (caso de uso)
-		#Se crea cuenta en pro y dev
-		return (1,0,1,0)
+		#Se crea cuenta en dev
+		if cuenta_pro in ('S','s'):
+			#Tambien en pro
+			print('[INFO] Se crea también cuenta en pro por petición')
+			return (1,0,1,0)
+		else:
+			print('[INFO] Se crea cuenta únicamente en dev')
+			return (0,0,1,0)
 	if rol_user == '4':
 		#Responsable de area usuaria (area)
 		#Se crea cuenta en pro
-		return (1,0,0,0)
+		if cuenta_pro in ('S','s'):
+			print('[INFO] Se crea cuenta en pro por petición')
+			return (1,0,0,0)
+		else:
+			print('[INFO] No es necesario crear usuarios')
+			return (0,0,0,0)
 	if rol_user == '5':
 		#Engineering
 		#Se crea cuenta en pro,int,dev y opt
@@ -251,9 +274,15 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		iam=aws_connection(role_arn)
 
 		# Se crea el usuario
-		response = iam.create_user(
-			UserName=new_user
-		)
+		try:
+			response = iam.create_user(
+				UserName=new_user
+			)
+		except ClientError as e:
+			if e.response['Error']['Code'] == 'EntityAlreadyExists':
+				print('[ERROR] El usuario ya existe')
+			else:
+				print('[ERROR] Error inesperado: %s' % e) 
 
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)
@@ -267,10 +296,15 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		role_arn = 'arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
 		iam=aws_connection(role_arn)
 
-		# Se crea el usuario
-		response = iam.create_user(
-			UserName=new_user
-		)
+		try:
+			response = iam.create_user(
+				UserName=new_user
+			)
+		except ClientError as e:
+			if e.response['Error']['Code'] == 'EntityAlreadyExists':
+				print('[ERROR] El usuario ya existe')
+			else:
+				print('[ERROR] Error inesperado: %s' % e) 
 
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)
@@ -285,10 +319,15 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		role_arn = 'arn:aws:iam::363896548138:role/dev-na-delegated-jenkins'
 		iam=aws_connection(role_arn)
 
-		# Se crea el usuario
-		response = iam.create_user(
-			UserName=new_user
-		)
+		try:
+			response = iam.create_user(
+				UserName=new_user
+			)
+		except ClientError as e:
+			if e.response['Error']['Code'] == 'EntityAlreadyExists':
+				print('[ERROR] El usuario ya existe')
+			else:
+				print('[ERROR] Error inesperado: %s' % e) 
 
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)
@@ -302,10 +341,15 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		role_arn = 'arn:aws:iam::416481324865:role/pro-opt-delegated-jenkins'
 		iam=aws_connection(role_arn)
 
-		# Se crea el usuario
-		response = iam.create_user(
-			UserName=new_user
-		)
+		try:
+			response = iam.create_user(
+				UserName=new_user
+			)
+		except ClientError as e:
+			if e.response['Error']['Code'] == 'EntityAlreadyExists':
+				print('[ERROR] El usuario ya existe')
+			else:
+				print('[ERROR] Error inesperado: %s' % e) 
 
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)

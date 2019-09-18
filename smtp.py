@@ -18,11 +18,15 @@ rol_user = sys.argv[2]
 #Hacer todos los casos, mejor coger el rol del usuario a crear
 #stage = sys.argv[4]
 caso_de_uso = sys.argv[4]
-new_user = sys.argv[6]
-user=sys.argv[7]
-password=sys.argv[8]
-address=sys.argv[10]
+cuenta_pro=sys.argv[6]
+new_user = sys.argv[8]
+user=sys.argv[9]
+password=sys.argv[10]
+address=sys.argv[12]
 
-accounts=functions.coger_role(rol_user)
+accounts=functions.coger_role(rol_user,cuenta_pro)
+if accounts == (0,0,0,0):
+	print('[INFO] No es necesario crear ninguna cuenta')
+	sys.exit(1)
 functions.assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso) 
-print('final, se han creado los usuarios correspondientes')
+print('[INFO] Finalizado con éxito la creación del usuario')

@@ -43,7 +43,7 @@ def send_email1(user,password,address,new_user,stage):
         server.login(user, password)
         server.sendmail(sender, emails, msg.as_string())
         server.close()
-        print('Mail enviado satisfactoriamente')
+        print('[INFO] Primer mail enviado satisfactoriamente')
     except Exception as e:
         print("Error: ", e)
     #Una vez mandado el primer correo, se manda el segundo con los credenciales
@@ -79,6 +79,6 @@ def send_email2(user,password,address,new_user,stage):
         server.login(user, password)
         server.sendmail(sender, msg['To'], msg.as_string())
         server.close()
-        print('Mail de credenciales enviado satisfactoriamente')
+        print('[INFO] Segundo mail con credenciales enviado satisfactoriamente')
     except Exception as e:
         print("Error: ", e)
