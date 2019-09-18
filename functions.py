@@ -273,7 +273,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		)
 
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-		create_credentials(new_user,iam)
+		create_credentials(new_user,iam,rol_user)
 
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
@@ -291,7 +291,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		)
 
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-		create_credentials(new_user,iam)
+		create_credentials(new_user,iam,rol_user)
 
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
@@ -308,7 +308,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 		)
 
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-		create_credentials(new_user,iam)
+		create_credentials(new_user,iam,rol_user)
 
 		emails_smtp.send_email1(user,password,address,new_user,stage)
 
