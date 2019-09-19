@@ -19,7 +19,7 @@ def send_email1(user,password,address,new_user,stage):
     sender = 'no-reply@na.telefonicadev.com'
     sender_name = 'na-engineering'
     #Cambiar esto de aqui abajo cuando funcione ok
-    cc=['na-engineering@telefonica.com']
+    cc=['andreap.isla97@gmail.com']
     mailto=[address]
     emails=mailto + cc
     smtp_host='email-smtp.eu-west-1.amazonaws.com'
