@@ -115,6 +115,7 @@ def aws_connection(role_arn):
 
 def create_credentials(new_user,iam,rol_user):
 	#aqui creo la password
+	#El responsable de area no incluye acceso a la consola, solo se crea el par de access key
 	if rol_user != '4': 
 		while True:
 			try:
@@ -137,6 +138,7 @@ def create_credentials(new_user,iam,rol_user):
 	data = response['AccessKey']
 	data.pop('Status')
 	data.pop('CreateDate')
+	#El responsable de area no incluye acceso a la consola, solo se crea el par de access key
 	if rol_user != '4':
 		data['Password'] = contrasena
 	data['ConsoleLoginLink']='https://na-int.signin.aws.amazon.com/console'
@@ -207,7 +209,7 @@ def coger_role(rol_user,cuenta_pro,caso_de_uso):
 		return (1,1,1,1)
 
 def assign_basicforce(iam,new_user):
-	#Le añado a los dos grupos: 
+	#Le añado a BasicIAM y a ForceMFA: 
 	response = iam.add_user_to_group(
 		GroupName='BasicIAM',
 		UserName=new_user
@@ -330,7 +332,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 			else:
 				print('[ERROR] Error inesperado: %s' % e) 
 
-		print('[INFO]Usuario creado correctamente en '+stage)
+		print('[INFO]Usuario creado correctamente en '+stage+':')
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)
 
@@ -353,7 +355,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 			else:
 				print('[ERROR] Error inesperado: %s' % e) 
 
-		print('[INFO]Usuario creado correctamente en '+stage)
+		print('[INFO]Usuario creado correctamente en '+stage+':')
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)
 
@@ -377,7 +379,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 			else:
 				print('[ERROR] Error inesperado: %s' % e) 
 
-		print('[INFO]Usuario creado correctamente en '+stage)
+		print('[INFO]Usuario creado correctamente en '+stage+':')
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)
 
@@ -400,7 +402,7 @@ def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso
 			else:
 				print('[ERROR] Error inesperado: %s' % e) 
 
-		print('[INFO]Usuario creado correctamente en '+stage)
+		print('[INFO]Usuario creado correctamente en '+stage+':')
 		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
 		create_credentials(new_user,iam,rol_user)
 
