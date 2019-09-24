@@ -312,7 +312,7 @@ def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
 	if rol_str == 'Engineering':
 		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
-	if rol_user == 'Engineering Manager':
+	if rol_str == 'Engineering Manager':
 		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 
