@@ -340,8 +340,8 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 		assign_groups(iam,cuenta,rol_str,newuser,mis_casos)
 		create_credentials(newuser,iam,rol_str,consoleLogin)
 
-		emails_stmp.send_email1(user,password,address,newuser,cuenta,nombre_entorno,consoleLogin)
-		emails_stmp.send_email2(user,password,address,newuser,cuenta,)
+		emails_smtp.send_email1(user,password,address,newuser,cuenta,nombre_entorno,consoleLogin)
+		emails_smtp.send_email2(user,password,address,newuser,cuenta,)
 	# if accounts[0] == 1:
 	# 	#Se crea cuenta en pro
 	# 	stage = 'pro'
