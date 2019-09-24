@@ -13,8 +13,8 @@ import string
 import random
 import functions
 
-#PONER EN COPIA A NA CUANDO ESTE TODO OK
-def send_email1(user,password,address,new_user,stage):
+
+def send_email1(user,password,address,newuser,cuenta,nombre_entorno,consoleLogin):
     msg = MIMEMultipart('alternative')
     sender = 'no-reply@na.telefonicadev.com'
     sender_name = 'na-engineering'
@@ -24,14 +24,14 @@ def send_email1(user,password,address,new_user,stage):
     emails=mailto + cc
     smtp_host='email-smtp.eu-west-1.amazonaws.com'
     smtp_port=587
-    entorno=functions.get_entorno(stage)
-    loginurl=functions.get_loginurl(stage)
-    nombre=functions.get_name(new_user)
-    msg['Subject'] = 'Acceso a AWS Network Analytics entorno de '+ entorno
+    #entorno=functions.get_entorno(stage)
+    #loginurl=functions.get_loginurl(stage)
+    nombre=functions.get_name(newuser)
+    msg['Subject'] = 'Acceso a AWS Network Analytics entorno de '+ nombre_entorno
     msg['From'] = email.utils.formataddr((sender_name, sender))
     msg['To'] =address
     message_template = functions.read_template('mensaje1.txt')
-    message = message_template.safe_substitute(name=nombre, entorno=stage, loginurl=loginurl, user_name=new_user)
+    message = message_template.safe_substitute(name=nombre, entorno=cuenta, loginurl=consoleLogin, user_name=newuser)
 
     msg.attach(MIMEText(message, 'plain'))
     #msg.attach(MIMEText(body_html, 'html', 'UTF-8'))
@@ -48,14 +48,14 @@ def send_email1(user,password,address,new_user,stage):
         print("Error: ", e)
     #Una vez mandado el primer correo, se manda el segundo con los credenciales
 
-def send_email2(user,password,address,new_user,stage):
+def send_email2(user,password,address,newuser,cuenta):
     msg = MIMEMultipart('alternative')
     sender = 'no-reply@na.telefonicadev.com'
     sender_name = 'na-engineering'
     smtp_host='email-smtp.eu-west-1.amazonaws.com'
     smtp_port=587
-    nombre=functions.get_name(new_user)
-    msg['Subject'] = 'Credenciales AWS Network Analytics entorno '+ stage
+    nombre=functions.get_name(newuser)
+    msg['Subject'] = 'Credenciales AWS Network Analytics entorno '+ cuenta
     msg['From'] = email.utils.formataddr((sender_name, sender))
     msg['To'] =address
 

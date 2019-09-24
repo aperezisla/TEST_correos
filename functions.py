@@ -70,7 +70,7 @@ def get_role(stage):
 	if stage == 'int':
 		return 'arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
 	elif stage == 'dev':
-		return 'arn:aws:iam::363896548138:role/dev-na-delegated-jenkins'
+		return 
 	elif stage == 'opt':
 		return 'arn:aws:iam::416481324865:role/pro-opt-delegated-jenkins'
 	elif stage == 'pro':
@@ -113,15 +113,15 @@ def aws_connection(role_arn):
 
 	return iam
 
-def create_credentials(new_user,iam,rol_user):
+def create_credentials(newuser,iam,rol_str,consoleLogin):
 	#aqui creo la password
 	#El responsable de area no incluye acceso a la consola, solo se crea el par de access key
-	if rol_user != '4': 
+	if rol_str != 'Responsable de area usuaria': 
 		while True:
 			try:
 				contrasena = generateSecureRandomString(12)
 				response = iam.create_login_profile(
-					UserName=new_user,
+					UserName=newuser,
 					Password=contrasena,
 					PasswordResetRequired=True
 				)
@@ -132,19 +132,19 @@ def create_credentials(new_user,iam,rol_user):
 
 	#print("creo las credenciales")
 	response = iam.create_access_key(
-		UserName=new_user,
+		UserName=newuser,
 	)
 
 	data = response['AccessKey']
 	data.pop('Status')
 	data.pop('CreateDate')
 	#El responsable de area no incluye acceso a la consola, solo se crea el par de access key
-	if rol_user != '4':
+	if rol_str != 'Responsable de area usuaria':
 		data['Password'] = contrasena
-	data['ConsoleLoginLink']='https://na-int.signin.aws.amazon.com/console'
+	data['ConsoleLoginLink']='https://'+consoleLogin+'.signin.aws.amazon.com/console'
 	with open('credentials.csv','w') as f:
 		f.write("%s,%s\n"%('UserName',data['UserName']))
-		if rol_user != '4':
+		if rol_str != 'Responsable de area usuaria':
 			f.write("%s,%s\n"%('Password',data['Password']))
 		f.write("%s,%s\n"%('AccessKeyId',data['AccessKeyId']))
 		f.write("%s,%s\n"%('SecretAccessKey',data['SecretAccessKey']))
@@ -233,180 +233,207 @@ def assign_specific_policy(policy,iam,new_user):
 	)
 
 
-def assign_groups(iam,stage,rol_user,new_user,caso_de_uso):
-	if rol_user == '1':
-		assign_basicforce(iam,new_user)
+def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
+	if rol_str == 'Desarrollador global':
+		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
-		if stage == 'dev':
-			assign_specific_group('PowerDevelopers',iam,new_user)
+		if cuenta == 'dev':
+			assign_specific_group('PowerDevelopers',iam,newuser)
 			print('[INFO] Asignado el grupo PowerDevelopers en su usuario dev')
-		if stage == 'pro':
-			assign_specific_group('NaDevGlobalDevPRO',iam,new_user)
+		if cuenta == 'pro':
+			assign_specific_group('NaDevGlobalDevPRO',iam,newuser)
 			print('[INFO] Asignado el grupo NaDevGlobalDevPRO en su usuario pro')
-	if rol_user == '2':
-		assign_basicforce(iam,new_user)
+	if rol_str == 'Desarrollador':
+		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
-		if stage == 'dev':
-			if caso_de_uso == '1':
-				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
-				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
-				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
-				print('[INFO] Asignados los grupos NaDevPlantaExternaAssia, Hada y TOA en su usuario dev')
-				assign_specific_policy('NaDevPlantaExternaCrossAccountPolicy',iam,new_user)
-				print('[INFO] Asignada la política NaDevPlantaExternaCrossAccountPolicy en su usuario dev')
-			if caso_de_uso == '2':
-				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevPlantaExternaTOA en su usuario dev')
-			if caso_de_uso == '3':
-				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevPlantaExternaAssia en su usuario dev')
-			if caso_de_uso == '4':
-				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevPlantaExternaHada en su usuario dev')
-		if stage == 'pro':
-			if caso_de_uso == '1':
-				assign_specific_group('NaDevPlantaExternaAssia',iam,new_user)
-				assign_specific_group('NaDevPlantaExternaHada',iam,new_user)
-				assign_specific_group('NaDevPlantaExternaTOA',iam,new_user)
-				print('[INFO] Asignados los grupos NaDevPlantaExternaAssia, Hada y TOA en su usuario pro')
-	if rol_user == '3':
-		assign_basicforce(iam,new_user)
+		for caso in mis_casos:
+			if cuenta == 'dev':
+				if caso == 'PLEXT':
+					assign_specific_group('NaDevPlantaExternaAssia',iam,newuser)
+					assign_specific_group('NaDevPlantaExternaHada',iam,newuser)
+					assign_specific_group('NaDevPlantaExternaTOA',iam,newuser)
+					print('[INFO] Asignados los grupos NaDevPlantaExternaAssia, Hada y TOA en su usuario dev')
+					assign_specific_policy('NaDevPlantaExternaCrossAccountPolicy',iam,newuser)
+					print('[INFO] Asignada la política NaDevPlantaExternaCrossAccountPolicy en su usuario dev')
+				if caso == 'PLEXT TOA':
+					assign_specific_group('NaDevPlantaExternaTOA',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevPlantaExternaTOA en su usuario dev')
+				if caso == 'PLEXT ASSIA':
+					assign_specific_group('NaDevPlantaExternaAssia',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevPlantaExternaAssia en su usuario dev')
+				if caso == 'PLEXT HADA':
+					assign_specific_group('NaDevPlantaExternaHada',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevPlantaExternaHada en su usuario dev')
+			if cuenta == 'pro':
+				if caso == 'PLEXT':
+					assign_specific_group('NaDevPlantaExternaAssia',iam,newuser)
+					assign_specific_group('NaDevPlantaExternaHada',iam,newuser)
+					assign_specific_group('NaDevPlantaExternaTOA',iam,newuser)
+					print('[INFO] Asignados los grupos NaDevPlantaExternaAssia, Hada y TOA en su usuario pro')
+	if rol_str == 'Desarrollador avanzado de Tableau':
+		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
-		if stage == 'dev':
-			if caso_de_uso == '2':
-				assign_specific_group('NaDevTableauPlantaExternaTOA',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaTOA en su usuario dev')
-			if caso_de_uso == '3':
-				assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaASSIA en su usuario dev')
-			if caso_de_uso == '4':
-				assign_specific_group('NaDevTableauPlantaExternaHADA',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaHADA en su usuario dev')
-			if caso_de_uso == '5':
-				assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevTableauPlantaInternaASTRO en su usuario dev')
-			if caso_de_uso == '6':
-				assign_specific_group('NaDevTableauOpsPlatGlob',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevTableauOpsPlatGlob en su usuario dev')
-		if stage == 'pro':
-			if caso_de_uso == '2':
-				assign_specific_group('NaDevTableauPlantaExternaTOA',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaTOA en su usuario pro')
-			if caso_de_uso == '3':
-				assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaASSIA en su usuario pro')
-			if caso_de_uso == '4':
-				assign_specific_group('NaDevTableauPlantaExternaHADA',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevTableauPlantaExternaHADA en su usuario pro')
-			if caso_de_uso == '5':
-				assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevTableauPlantaInternaASTRO en su usuario pro')
-			if caso_de_uso == '6':
-				assign_specific_group('NaDevTableauOpsPlatGlob',iam,new_user)
-				print('[INFO] Asignado el grupo NaDevTableauOpsPlatGlob en su usuario pro')
-	if rol_user == '4':
-		assign_basicforce(iam,new_user)
+		for caso in mis_casos:
+			if cuenta == 'dev':
+				if caso == 'PLEXT TOA':
+					assign_specific_group('NaDevTableauPlantaExternaTOA',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaTOA en su usuario dev')
+				if caso == 'PLEXT ASSIA':
+					assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaASSIA en su usuario dev')
+				if caso == 'PLEXT HADA':
+					assign_specific_group('NaDevTableauPlantaExternaHADA',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaHADA en su usuario dev')
+				if caso == 'ASTRO':
+					assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevTableauPlantaInternaASTRO en su usuario dev')
+				if caso == 'VIDEO Y PLATAFORMAS':
+					assign_specific_group('NaDevTableauOpsPlatGlob',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevTableauOpsPlatGlob en su usuario dev')
+			if cuenta == 'pro':
+				if caso == 'PLEXT TOA':
+					assign_specific_group('NaDevTableauPlantaExternaTOA',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaTOA en su usuario pro')
+				if caso == 'PLEXT ASSIA':
+					assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaASSIA en su usuario pro')
+				if caso == 'PLEXT HADA':
+					assign_specific_group('NaDevTableauPlantaExternaHADA',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaHADA en su usuario pro')
+				if caso == 'ASTRO':
+					assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevTableauPlantaInternaASTRO en su usuario pro')
+				if caso == 'VIDEO Y PLATAFORMAS':
+					assign_specific_group('NaDevTableauOpsPlatGlob',iam,newuser)
+					print('[INFO] Asignado el grupo NaDevTableauOpsPlatGlob en su usuario pro')
+	if rol_str == 'Responsable de area usuaria':
+		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
-	if rol_user == '5':
-		assign_basicforce(iam,new_user)
+	if rol_str == 'Engineering':
+		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
-	if rol_user == '6':
-		assign_basicforce(iam,new_user)
+	if rol_user == 'Engineering Manager':
+		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 
-def assign_role_arn(accounts,user,password,address,new_user,rol_user,caso_de_uso):
-	if accounts[0] == 1:
-		#Se crea cuenta en pro
-		stage = 'pro'
-		role_arn = 'arn:aws:iam::486960344036:role/pro-na-delegated-jenkins'
+def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,entornos):
+	for cuenta in accounts:
+		#voy mirando donde hay que crear cuenta
+		nombre_entorno=entornos[cuenta][0]
+		role_arn=entornos[cuenta][1]
+		consoleLogin=entornos[cuenta][2]
+
 		iam=aws_connection(role_arn)
 
-		# Se crea el usuario
+		#Se crea el usuario
 		try:
-			response = iam.create_user(
-				UserName=new_user
+			response=iam.create_user(
+				UserName=newuser
 			)
 		except ClientError as e:
 			if e.response['Error']['Code'] == 'EntityAlreadyExists':
 				print('[ERROR] El usuario ya existe')
 			else:
-				print('[ERROR] Error inesperado: %s' % e) 
+				print('[ERROR] Error inesperado: %s' % e)
 
-		print('[INFO]Usuario creado correctamente en '+stage+':')
-		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-		create_credentials(new_user,iam,rol_user)
+		print('[INFO]Usuario creado correctamente en '+cuenta+':')
+		assign_groups(iam,cuenta,rol_str,newuser,mis_casos)
+		create_credentials(newuser,iam,rol_str,consoleLogin)
 
-		emails_smtp.send_email1(user,password,address,new_user,stage)
+		emails_stmp.send_email1(user,password,address,newuser,cuenta,nombre_entorno,consoleLogin)
+		emails_stmp.send_email2(user,password,address,newuser,cuenta,)
+	# if accounts[0] == 1:
+	# 	#Se crea cuenta en pro
+	# 	stage = 'pro'
+	# 	role_arn = 'arn:aws:iam::486960344036:role/pro-na-delegated-jenkins'
+	# 	iam=aws_connection(role_arn)
 
-		emails_smtp.send_email2(user,password,address,new_user,stage)
-	if accounts[1] == 1:
-		stage = 'int'
-		#Se crea cuenta en int
-		role_arn = 'arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
-		iam=aws_connection(role_arn)
+	# 	# Se crea el usuario
+	# 	try:
+	# 		response = iam.create_user(
+	# 			UserName=new_user
+	# 		)
+	# 	except ClientError as e:
+	# 		if e.response['Error']['Code'] == 'EntityAlreadyExists':
+	# 			print('[ERROR] El usuario ya existe')
+	# 		else:
+	# 			print('[ERROR] Error inesperado: %s' % e) 
 
-		try:
-			response = iam.create_user(
-				UserName=new_user
-			)
-		except ClientError as e:
-			if e.response['Error']['Code'] == 'EntityAlreadyExists':
-				print('[ERROR] El usuario ya existe')
-			else:
-				print('[ERROR] Error inesperado: %s' % e) 
+	# 	print('[INFO]Usuario creado correctamente en '+stage+':')
+	# 	assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
+	# 	create_credentials(new_user,iam,rol_user)
 
-		print('[INFO]Usuario creado correctamente en '+stage+':')
-		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-		create_credentials(new_user,iam,rol_user)
+	# 	emails_smtp.send_email1(user,password,address,new_user,stage)
 
-		emails_smtp.send_email1(user,password,address,new_user,stage)
+	# 	emails_smtp.send_email2(user,password,address,new_user,stage)
+	# if accounts[1] == 1:
+	# 	stage = 'int'
+	# 	#Se crea cuenta en int
+	# 	role_arn = 'arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
+	# 	iam=aws_connection(role_arn)
 
-		emails_smtp.send_email2(user,password,address,new_user,stage)
+	# 	try:
+	# 		response = iam.create_user(
+	# 			UserName=new_user
+	# 		)
+	# 	except ClientError as e:
+	# 		if e.response['Error']['Code'] == 'EntityAlreadyExists':
+	# 			print('[ERROR] El usuario ya existe')
+	# 		else:
+	# 			print('[ERROR] Error inesperado: %s' % e) 
+
+	# 	print('[INFO]Usuario creado correctamente en '+stage+':')
+	# 	assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
+	# 	create_credentials(new_user,iam,rol_user)
+
+	# 	emails_smtp.send_email1(user,password,address,new_user,stage)
+
+	# 	emails_smtp.send_email2(user,password,address,new_user,stage)
 		
-	if accounts[2] == 1:
-		#Se crea cuenta en dev
-		stage = 'dev'
-		role_arn = 'arn:aws:iam::363896548138:role/dev-na-delegated-jenkins'
-		iam=aws_connection(role_arn)
+	# if accounts[2] == 1:
+	# 	#Se crea cuenta en dev
+	# 	stage = 'dev'
+	# 	role_arn = 'arn:aws:iam::363896548138:role/dev-na-delegated-jenkins'
+	# 	iam=aws_connection(role_arn)
 
-		try:
-			response = iam.create_user(
-				UserName=new_user
-			)
-		except ClientError as e:
-			if e.response['Error']['Code'] == 'EntityAlreadyExists':
-				print('[ERROR] El usuario ya existe')
-			else:
-				print('[ERROR] Error inesperado: %s' % e) 
+	# 	try:
+	# 		response = iam.create_user(
+	# 			UserName=new_user
+	# 		)
+	# 	except ClientError as e:
+	# 		if e.response['Error']['Code'] == 'EntityAlreadyExists':
+	# 			print('[ERROR] El usuario ya existe')
+	# 		else:
+	# 			print('[ERROR] Error inesperado: %s' % e) 
 
-		print('[INFO]Usuario creado correctamente en '+stage+':')
-		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-		create_credentials(new_user,iam,rol_user)
+	# 	print('[INFO]Usuario creado correctamente en '+stage+':')
+	# 	assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
+	# 	create_credentials(new_user,iam,rol_user)
 
-		emails_smtp.send_email1(user,password,address,new_user,stage)
+	# 	emails_smtp.send_email1(user,password,address,new_user,stage)
 
-		emails_smtp.send_email2(user,password,address,new_user,stage)
-	if accounts[3] == 1:
-		#Se crea cuenta en opt
-		stage = 'opt'
-		role_arn = 'arn:aws:iam::416481324865:role/pro-opt-delegated-jenkins'
-		iam=aws_connection(role_arn)
+	# 	emails_smtp.send_email2(user,password,address,new_user,stage)
+	# if accounts[3] == 1:
+	# 	#Se crea cuenta en opt
+	# 	stage = 'opt'
+	# 	role_arn = 'arn:aws:iam::416481324865:role/pro-opt-delegated-jenkins'
+	# 	iam=aws_connection(role_arn)
 
-		try:
-			response = iam.create_user(
-				UserName=new_user
-			)
-		except ClientError as e:
-			if e.response['Error']['Code'] == 'EntityAlreadyExists':
-				print('[ERROR] El usuario ya existe')
-			else:
-				print('[ERROR] Error inesperado: %s' % e) 
+	# 	try:
+	# 		response = iam.create_user(
+	# 			UserName=new_user
+	# 		)
+	# 	except ClientError as e:
+	# 		if e.response['Error']['Code'] == 'EntityAlreadyExists':
+	# 			print('[ERROR] El usuario ya existe')
+	# 		else:
+	# 			print('[ERROR] Error inesperado: %s' % e) 
 
-		print('[INFO]Usuario creado correctamente en '+stage+':')
-		assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-		create_credentials(new_user,iam,rol_user)
+	# 	print('[INFO]Usuario creado correctamente en '+stage+':')
+	# 	assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
+	# 	create_credentials(new_user,iam,rol_user)
 
-		emails_smtp.send_email1(user,password,address,new_user,stage)
+	# 	emails_smtp.send_email1(user,password,address,new_user,stage)
 
-		emails_smtp.send_email2(user,password,address,new_user,stage)
-		
+	# 	emails_smtp.send_email2(user,password,address,new_user,stage)
+	# 	
