@@ -19,9 +19,10 @@ def send_email1(user,password,address,newuser,cuenta,nombre_entorno,consoleLogin
     sender = 'no-reply@na.telefonicadev.com'
     sender_name = 'na-engineering'
     #Cambiar esto de aqui abajo cuando funcione ok
-    cc=['na-engineering@telefonica.com']
+    #cc=['na-engineering@telefonica.com']
     mailto=[address]
-    emails=mailto + cc
+    #emails=mailto + cc
+    emails=mailto
     smtp_host='email-smtp.eu-west-1.amazonaws.com'
     smtp_port=587
     #entorno=functions.get_entorno(stage)
