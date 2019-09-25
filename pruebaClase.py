@@ -25,6 +25,7 @@ class Mensaje:
 		self.nombre_entorno=nombre_entorno
 		self.consoleLogin=consoleLogin
 		self.msg = MIMEMultipart('alternative')
+		self.msg2 = MIMEMultipart('alternative')
 		self.sender='no-reply@na.telefonicadev.com'
 		self.sender_name='na-engineering'
 		self.smtp_host='email-smtp.eu-west-1.amazonaws.com'
@@ -32,36 +33,38 @@ class Mensaje:
 		self.nombre=functions.get_name(newuser)
 		#COMPROBAR QUE ESTO ESTA BIEN
 		self.msg['From'] = email.utils.formataddr((self.sender_name,self.sender))
+		self.msg2['From'] = self.msg['From']
 
 	def mail1(self):
 		#meter aqui el subject
-		self.msg['Subject']='Acceso a AWS Network Analytics entorno de '+self.nombre_entorno
+		self.msg1['Subject']='Acceso a AWS Network Analytics entorno de '+self.nombre_entorno
 		#CAMBIAR ESTO! Lleva copia a na
 		self.cc=['andreap.isla97@gmail.com']
 		self.emails=[self.address] + self.cc
 		#self.msg['To']=self.address
 		self.message_template = functions.read_template('mensaje1.txt')
 		self.message = self.message_template.safe_substitute(name=self.nombre,entorno=self.cuenta, loginurl=self.consoleLogin,user_name=self.newuser)
-		self.msg.attach(MIMEText(self.message,'plain'))
+		self.msg1.attach(MIMEText(self.message,'plain'))
+		envio(self,msg1)
 
 
 
 	def mail2(self):
 		#meter aqui el subject
-		self.msg['Subject']='Credenciales AWS Network Analytics entorno '+self.cuenta
+		self.msg2['Subject']='Credenciales AWS Network Analytics entorno '+self.cuenta
 		self.emails=[self.address]
 		self.message_template = functions.read_template('mensaje2.txt')
 		self.message=self.message_template.safe_substitute(name=self.nombre)
-		self.msg.attach(MIMEText(self.message,'plain'))
+		self.msg2.attach(MIMEText(self.message,'plain'))
 
 		self.mail_file=MIMEBase('application','csv')
 		self.mail_file.set_payload(open('credentials.csv','r').read())
 		self.mail_file.add_header('Content-Disposition','attachment',filename='credentials.csv')
 		encoders.encode_base64(self.mail_file)
-		self.msg.attach(self.mail_file)
+		self.msg2.attach(self.mail_file)
+		envio(self,msg2)
 
-
-	def envio(self):
+	def envio(self,msg):
 		try:
 			server = smtplib.SMTP(self.smtp_host,self.smtp_port)
 			server.ehlo()
