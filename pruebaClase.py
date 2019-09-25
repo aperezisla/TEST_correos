@@ -58,7 +58,7 @@ class Mensaje:
 		self.message_template = functions.read_template('mensaje1.txt')
 		self.message = self.message_template.safe_substitute(name=self.nombre,entorno=self.cuenta, loginurl=self.consoleLogin,user_name=self.newuser)
 		self.msg1.attach(MIMEText(self.message,'plain'))
-		locals()[envio(self,msg1)]
+	envio(self,msg1)
 
 
 
@@ -75,7 +75,7 @@ class Mensaje:
 		self.mail_file.add_header('Content-Disposition','attachment',filename='credentials.csv')
 		encoders.encode_base64(self.mail_file)
 		self.msg2.attach(self.mail_file)
-		envio(self,msg2)
+	envio(self,msg2)
 
 	
 
