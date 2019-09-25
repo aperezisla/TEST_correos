@@ -77,18 +77,6 @@ class Mensaje:
 		self.msg2.attach(self.mail_file)
 		envio(self,msg2)
 
-	def envio(self,msg):
-		try:
-			server = smtplib.SMTP(self.smtp_host,self.smtp_port)
-			server.ehlo()
-			server.starttls()
-			server.ehlo()
-			server.login(self.user,self.password)
-			server.sendmail(self.sender,self.emails,self.msg.as_string())
-			self.msg['Subject']=None
-			server.close()
-		except Exception as e:
-			print("Error: ", e)
-
+	
 
 
