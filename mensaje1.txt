@@ -5,11 +5,11 @@ Los datos de acceso son los siguientes:
 
 Login URL: https://$loginurl.signin.aws.amazon.com/console
 Usuario: $user_name
-En un correo diferente se te proporcionarán las credenciales iniciales. Deberás cambiar la contraseña en el primer login.
+En un correo diferente se le proporcionarán las credenciales iniciales. Deberá cambiar la contraseña en el primer login.
 La contraseña debe tener mínimo 8 caracteres, al menos un número y al menos un carácter no alfanumérico ( ! @ # $ % ^ & * ( ) _ + - = [ ] { } | ' )
 
-Para que puedas acceder a los recursos de Amazon primero tendrás que configurar la doble autenticación con un dispositivo MFA.
-En el siguiente enlace de Amazon puedes informarte sobre MFA y cómo configurarlo: https://aws.amazon.com/iam/details/mfa/
+Para que pueda acceder a los recursos de Amazon primero tendrá que configurar la doble autenticación con un dispositivo MFA.
+En el siguiente enlace de Amazon puede informarse sobre MFA y cómo configurarlo: https://aws.amazon.com/iam/details/mfa/
 
 Un saludo,
 NA Engineering

@@ -12,7 +12,6 @@ import sys
 import string
 import random
 import functions
-import emails_smtp
 import argparse
 
 casos_de_uso=[

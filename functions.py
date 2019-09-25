@@ -12,8 +12,7 @@ import os
 import sys
 import string
 import random
-import emails_smtp
-from pruebaClase import Mensaje
+from envio_smtp import Mensaje
 
 def get_name(newuser):
 	real=''
@@ -59,7 +58,6 @@ def aws_connection(role_arn):
 	return iam
 
 def create_credentials(newuser,iam,rol_str,consoleLogin):
-	#aqui creo la password
 	#El responsable de area no incluye acceso a la consola, solo se crea el par de access key
 	if rol_str != 'Responsable de area usuaria': 
 		while True:
@@ -75,7 +73,6 @@ def create_credentials(newuser,iam,rol_str,consoleLogin):
 			except Exception:
 				print('[INFO] La contraseña no es válida, se crea de nuevo.')
 
-	#print("creo las credenciales")
 	response = iam.create_access_key(
 		UserName=newuser,
 	)
@@ -83,7 +80,7 @@ def create_credentials(newuser,iam,rol_str,consoleLogin):
 	data = response['AccessKey']
 	data.pop('Status')
 	data.pop('CreateDate')
-	#El responsable de area no incluye acceso a la consola, solo se crea el par de access key
+
 	if rol_str != 'Responsable de area usuaria':
 		data['Password'] = contrasena
 	data['ConsoleLoginLink']='https://'+consoleLogin+'.signin.aws.amazon.com/console'
@@ -97,7 +94,6 @@ def create_credentials(newuser,iam,rol_str,consoleLogin):
 
 
 def assign_basicforce(iam,newuser):
-	#Le añado a BasicIAM y a ForceMFA: 
 	response = iam.add_user_to_group(
 		GroupName='BasicIAM',
 		UserName=newuser
@@ -206,14 +202,12 @@ def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
 
 def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,entornos):
 	for cuenta in accounts:
-		#voy mirando donde hay que crear cuenta
 		nombre_entorno=entornos[cuenta][0]
 		role_arn=entornos[cuenta][1]
 		consoleLogin=entornos[cuenta][2]
 
 		iam=aws_connection(role_arn)
 
-		#Se crea el usuario
 		try:
 			response=iam.create_user(
 				UserName=newuser
@@ -228,8 +222,6 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 		assign_groups(iam,cuenta,rol_str,newuser,mis_casos)
 		create_credentials(newuser,iam,rol_str,consoleLogin)
 
-		#emails_smtp.send_email1(user,password,address,newuser,cuenta,nombre_entorno,consoleLogin)
-		#emails_smtp.send_email2(user,password,address,newuser,cuenta,)
 		x=Mensaje(user,password,address,newuser,cuenta,nombre_entorno,consoleLogin)
 		msg1 = x.mail1()
 		x.envio(msg1)
