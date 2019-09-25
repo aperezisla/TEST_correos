@@ -230,7 +230,7 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 
 		#emails_smtp.send_email1(user,password,address,newuser,cuenta,nombre_entorno,consoleLogin)
 		#emails_smtp.send_email2(user,password,address,newuser,cuenta,)
-		x=Mensaje()
+		x=Mensaje(user,password,address,newuser,cuenta,nombre_entorno,consoleLogin)
 		x.mail1()
 		x.envio()
 		print('[INFO] El primer mail se ha mandado correctamente')
