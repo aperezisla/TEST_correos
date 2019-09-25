@@ -41,7 +41,7 @@ class Mensaje:
 		self.emails=[self.address] + self.cc
 		#self.msg['To']=self.address
 		self.message_template = functions.read_template('mensaje1.txt')
-		self.message = self.message_template.safe_substitute(name=nombre,entorno=cuenta, loginurl=consoleLogin,user_name=newuser)
+		self.message = self.message_template.safe_substitute(name=self.nombre,entorno=self.cuenta, loginurl=self.consoleLogin,user_name=self.newuser)
 		self.msg.attach(MIMEText(message,'plain'))
 
 
@@ -51,7 +51,7 @@ class Mensaje:
 		self.msg['Subject']='Credenciales AWS Network Analytics entorno '+self.cuenta
 		self.emails=[self.address]
 		self.message_template = functions.read_template('mensaje2.txt')
-		self.message=self.message_template.safe_substitute(name=nombre)
+		self.message=self.message_template.safe_substitute(name=self.nombre)
 		self.msg.attach(MIMEText(message,'plain'))
 
 		self.mail_file=MIMEBase('application','csv')
