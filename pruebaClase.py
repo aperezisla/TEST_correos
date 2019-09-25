@@ -42,7 +42,7 @@ class Mensaje:
 			server.starttls()
 			server.ehlo()
 			server.login(self.user,self.password)
-			server.sendmail(self.sender,self.emails,self.msg.as_string())
+			server.sendmail(self.sender,self.emails,msg.as_string())
 			self.msg['Subject']=None
 			server.close()
 		except Exception as e:
