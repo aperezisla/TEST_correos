@@ -31,7 +31,7 @@ class Mensaje:
 		self.smtp_port=587
 		self.nombre=functions.get_name(newuser)
 		#COMPROBAR QUE ESTO ESTA BIEN
-		self.msg['From'] = email.utils.formataddr((sender_name,sender))
+		self.msg['From'] = email.utils.formataddr((self.sender_name,self.sender))
 
 	def mail1(self):
 		#meter aqui el subject
