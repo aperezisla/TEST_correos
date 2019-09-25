@@ -58,7 +58,7 @@ class Mensaje:
 		self.message_template = functions.read_template('mensaje1.txt')
 		self.message = self.message_template.safe_substitute(name=self.nombre,entorno=self.cuenta, loginurl=self.consoleLogin,user_name=self.newuser)
 		self.msg1.attach(MIMEText(self.message,'plain'))
-		envio(self,msg1)
+		locals()[envio(self,msg1)]
 
 
 
