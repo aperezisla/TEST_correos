@@ -35,6 +35,19 @@ class Mensaje:
 		self.msg1['From'] = email.utils.formataddr((self.sender_name,self.sender))
 		self.msg2['From'] = self.msg1['From']
 
+	def envio(self,msg):
+		try:
+			server = smtplib.SMTP(self.smtp_host,self.smtp_port)
+			server.ehlo()
+			server.starttls()
+			server.ehlo()
+			server.login(self.user,self.password)
+			server.sendmail(self.sender,self.emails,self.msg.as_string())
+			self.msg['Subject']=None
+			server.close()
+		except Exception as e:
+			print("Error: ", e)
+
 	def mail1(self):
 		#meter aqui el subject
 		self.msg1['Subject']='Acceso a AWS Network Analytics entorno de '+self.nombre_entorno
