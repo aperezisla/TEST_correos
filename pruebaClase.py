@@ -24,7 +24,7 @@ class Mensaje:
 		self.cuenta=cuenta
 		self.nombre_entorno=nombre_entorno
 		self.consoleLogin=consoleLogin
-		self.msg = MIMEMultipart('alternative')
+		self.msg1 = MIMEMultipart('alternative')
 		self.msg2 = MIMEMultipart('alternative')
 		self.sender='no-reply@na.telefonicadev.com'
 		self.sender_name='na-engineering'
@@ -32,8 +32,8 @@ class Mensaje:
 		self.smtp_port=587
 		self.nombre=functions.get_name(newuser)
 		#COMPROBAR QUE ESTO ESTA BIEN
-		self.msg['From'] = email.utils.formataddr((self.sender_name,self.sender))
-		self.msg2['From'] = self.msg['From']
+		self.msg1['From'] = email.utils.formataddr((self.sender_name,self.sender))
+		self.msg2['From'] = self.msg1['From']
 
 	def mail1(self):
 		#meter aqui el subject
