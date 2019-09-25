@@ -13,72 +13,17 @@ import sys
 import string
 import random
 import emails_smtp
+from pruebaClase import Mensaje
 
-def get_casodeuso(caso_de_uso):
-	if caso_de_uso == '1':
-		return 'PLEXT'
-	if caso_de_uso == '2':
-		return 'PLEXT TOA'
-	if caso_de_uso == '3':
-		return 'PLEXT ASSIA'
-	if caso_de_uso == '4':
-		return 'PLEXT HADA'
-	if caso_de_uso == '5':
-		return 'ASTRO'
-	if caso_de_uso == '6':
-		return 'VIDEO Y PLATAFORMAS'
-
-
-def get_name(new_user):
+def get_name(newuser):
 	real=''
-	for i in new_user:
+	for i in newuser:
 		if(i == '.'):
 			break
 		else:
 			real += i
 	real=real[0].upper() + real[1:]
 	return(real)
-
-def get_entorno(stage):
-	if stage == 'int':
-		return 'integración'
-	elif stage == 'dev':
-		return 'desarrollo'
-	elif stage == 'opt':
-		return 'operaciones'
-	elif stage == 'pro':
-		return 'producción'
-	else:
-		print('[ERROR] Entorno: Stage can only be dev, int, pro or opt.')
-		sys.exit(1)
-
-def get_loginurl(stage):
-	if stage == 'int':
-		return 'na-int'
-	elif stage == 'dev':
-		return 'na-dev'
-	elif stage == 'opt':
-		return 'na-opt'
-	elif stage == 'pro':
-		return 'na-pro'
-	else:
-		print('[ERROR] Login: Stage can only be dev, int, pro or opt.')
-		sys.exit(1)
-
-
-def get_role(stage):
-	if stage == 'int':
-		return 'arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
-	elif stage == 'dev':
-		return 
-	elif stage == 'opt':
-		return 'arn:aws:iam::416481324865:role/pro-opt-delegated-jenkins'
-	elif stage == 'pro':
-		return 'arn:aws:iam::486960344036:role/pro-na-delegated-jenkins'
-	else:
-		print('[ERROR] Role: Stage can only be dev, int, pro or opt.')
-		sys.exit(1)
-
 
 def generateSecureRandomString(stringLength = 12):
 	special_characters="!@#$%^&*()_+-=[]{}|'"
@@ -151,84 +96,27 @@ def create_credentials(newuser,iam,rol_str,consoleLogin):
 		f.write("%s,%s\n"%('ConsoleLoginLink',data['ConsoleLoginLink']))
 
 
-def coger_role(rol_user,cuenta_pro,caso_de_uso):
-	if rol_user == '1':
-		#Desarrollador global
-		#Se crea cuenta en dev
-		print('[INFO] Desarrollador global: ')
-		if cuenta_pro in ('S','s'):
-			#Tambien en pro
-			print('[INFO] Se crea también cuenta en pro por petición.')
-			return (1,0,1,0)
-		else:
-			print('[INFO] Se crea cuenta únicamente en dev.')
-			return (0,0,1,0)
-	if rol_user == '2':
-		#Desarrollador (caso de uso)
-		#Se crea cuenta en dev
-		print('[INFO] Desarrollador ('+get_casodeuso(caso_de_uso)+'): ')
-		if cuenta_pro in ('S','s'):
-			#Tambien en pro
-			print('[INFO] Se crea también cuenta en pro por petición.')
-			return (1,0,1,0)
-		else:
-			print('[INFO] Se crea cuenta únicamente en dev.')
-			return (0,0,1,0)
-	if rol_user == '3':
-		#Desarrollador avanzado de Tableau (caso de uso)
-		#Se crea cuenta en dev
-		print('[INFO] Desarrollador avanzado de Tableau ('+get_casodeuso(caso_de_uso)+'): ')
-		if cuenta_pro in ('S','s'):
-			#Tambien en pro
-			print('[INFO] Se crea también cuenta en pro por petición.')
-			return (1,0,1,0)
-		else:
-			print('[INFO] Se crea cuenta únicamente en dev.')
-			return (0,0,1,0)
-	if rol_user == '4':
-		#Responsable de area usuaria (area)
-		#Se crea cuenta en pro
-		print('[INFO] Responsable de área usuaria: ')
-		if cuenta_pro in ('S','s'):
-			print('[INFO] Se crea cuenta en pro por petición.')
-			return (1,0,0,0)
-		else:
-			print('[INFO] No es necesario crear usuarios.')
-			return (0,0,0,0)
-	if rol_user == '5':
-		#Engineering
-		#Se crea cuenta en pro,int,dev y opt
-		print('[INFO] Engineering: ')
-		print('[INFO] Se crea cuenta en pro, int, dev y opt.')
-		return (1,1,1,1)
-	if rol_user == '6':
-		#Engineering Manager
-		#Se crea cuenta en pro,int,dev y opt
-		print('[INFO] Engineering Manager: ')
-		print('[INFO] Se crea cuenta en pro, int, dev y opt.')
-		return (1,1,1,1)
-
-def assign_basicforce(iam,new_user):
+def assign_basicforce(iam,newuser):
 	#Le añado a BasicIAM y a ForceMFA: 
 	response = iam.add_user_to_group(
 		GroupName='BasicIAM',
-		UserName=new_user
+		UserName=newuser
 	)
 
 	response = iam.add_user_to_group(
 		GroupName='ForceMFA',
-		UserName=new_user
+		UserName=newuser
 	)
 
-def assign_specific_group(group,iam,new_user):
+def assign_specific_group(group,iam,newuser):
 	response=iam.add_user_to_group(
 		GroupName=group,
-		UserName=new_user
+		UserName=newuser
 	)
 
-def assign_specific_policy(policy,iam,new_user):
+def assign_specific_policy(policy,iam,newuser):
 	response=iam.attach_user_policy(
-		UserName=new_user,
+		UserName=newuser,
 		PolicyArn=policy
 	)
 
@@ -340,100 +228,12 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 		assign_groups(iam,cuenta,rol_str,newuser,mis_casos)
 		create_credentials(newuser,iam,rol_str,consoleLogin)
 
-		emails_smtp.send_email1(user,password,address,newuser,cuenta,nombre_entorno,consoleLogin)
-		emails_smtp.send_email2(user,password,address,newuser,cuenta,)
-	# if accounts[0] == 1:
-	# 	#Se crea cuenta en pro
-	# 	stage = 'pro'
-	# 	role_arn = 'arn:aws:iam::486960344036:role/pro-na-delegated-jenkins'
-	# 	iam=aws_connection(role_arn)
-
-	# 	# Se crea el usuario
-	# 	try:
-	# 		response = iam.create_user(
-	# 			UserName=new_user
-	# 		)
-	# 	except ClientError as e:
-	# 		if e.response['Error']['Code'] == 'EntityAlreadyExists':
-	# 			print('[ERROR] El usuario ya existe')
-	# 		else:
-	# 			print('[ERROR] Error inesperado: %s' % e) 
-
-	# 	print('[INFO]Usuario creado correctamente en '+stage+':')
-	# 	assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-	# 	create_credentials(new_user,iam,rol_user)
-
-	# 	emails_smtp.send_email1(user,password,address,new_user,stage)
-
-	# 	emails_smtp.send_email2(user,password,address,new_user,stage)
-	# if accounts[1] == 1:
-	# 	stage = 'int'
-	# 	#Se crea cuenta en int
-	# 	role_arn = 'arn:aws:iam::624472315656:role/int-na-delegated-jenkins'
-	# 	iam=aws_connection(role_arn)
-
-	# 	try:
-	# 		response = iam.create_user(
-	# 			UserName=new_user
-	# 		)
-	# 	except ClientError as e:
-	# 		if e.response['Error']['Code'] == 'EntityAlreadyExists':
-	# 			print('[ERROR] El usuario ya existe')
-	# 		else:
-	# 			print('[ERROR] Error inesperado: %s' % e) 
-
-	# 	print('[INFO]Usuario creado correctamente en '+stage+':')
-	# 	assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-	# 	create_credentials(new_user,iam,rol_user)
-
-	# 	emails_smtp.send_email1(user,password,address,new_user,stage)
-
-	# 	emails_smtp.send_email2(user,password,address,new_user,stage)
-		
-	# if accounts[2] == 1:
-	# 	#Se crea cuenta en dev
-	# 	stage = 'dev'
-	# 	role_arn = 'arn:aws:iam::363896548138:role/dev-na-delegated-jenkins'
-	# 	iam=aws_connection(role_arn)
-
-	# 	try:
-	# 		response = iam.create_user(
-	# 			UserName=new_user
-	# 		)
-	# 	except ClientError as e:
-	# 		if e.response['Error']['Code'] == 'EntityAlreadyExists':
-	# 			print('[ERROR] El usuario ya existe')
-	# 		else:
-	# 			print('[ERROR] Error inesperado: %s' % e) 
-
-	# 	print('[INFO]Usuario creado correctamente en '+stage+':')
-	# 	assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-	# 	create_credentials(new_user,iam,rol_user)
-
-	# 	emails_smtp.send_email1(user,password,address,new_user,stage)
-
-	# 	emails_smtp.send_email2(user,password,address,new_user,stage)
-	# if accounts[3] == 1:
-	# 	#Se crea cuenta en opt
-	# 	stage = 'opt'
-	# 	role_arn = 'arn:aws:iam::416481324865:role/pro-opt-delegated-jenkins'
-	# 	iam=aws_connection(role_arn)
-
-	# 	try:
-	# 		response = iam.create_user(
-	# 			UserName=new_user
-	# 		)
-	# 	except ClientError as e:
-	# 		if e.response['Error']['Code'] == 'EntityAlreadyExists':
-	# 			print('[ERROR] El usuario ya existe')
-	# 		else:
-	# 			print('[ERROR] Error inesperado: %s' % e) 
-
-	# 	print('[INFO]Usuario creado correctamente en '+stage+':')
-	# 	assign_groups(iam,stage,rol_user,new_user,caso_de_uso)
-	# 	create_credentials(new_user,iam,rol_user)
-
-	# 	emails_smtp.send_email1(user,password,address,new_user,stage)
-
-	# 	emails_smtp.send_email2(user,password,address,new_user,stage)
-	# 	
+		#emails_smtp.send_email1(user,password,address,newuser,cuenta,nombre_entorno,consoleLogin)
+		#emails_smtp.send_email2(user,password,address,newuser,cuenta,)
+		x=Mensaje()
+		x.mail1()
+		x.envio()
+		print('[INFO] El primer mail se ha mandado correctamente')
+		x.mail2()
+		x.envio()
+		print('[INFO] El mail con las credenciales se ha mandado correctamente')
