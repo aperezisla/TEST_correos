@@ -42,7 +42,7 @@ class Mensaje:
 		#self.msg['To']=self.address
 		self.message_template = functions.read_template('mensaje1.txt')
 		self.message = self.message_template.safe_substitute(name=self.nombre,entorno=self.cuenta, loginurl=self.consoleLogin,user_name=self.newuser)
-		self.msg.attach(MIMEText(message,'plain'))
+		self.msg.attach(MIMEText(self.message,'plain'))
 
 
 
@@ -52,7 +52,7 @@ class Mensaje:
 		self.emails=[self.address]
 		self.message_template = functions.read_template('mensaje2.txt')
 		self.message=self.message_template.safe_substitute(name=self.nombre)
-		self.msg.attach(MIMEText(message,'plain'))
+		self.msg.attach(MIMEText(self.message,'plain'))
 
 		self.mail_file=MIMEBase('application','csv')
 		self.mail_file.set_payload(open('credentials.csv','r').read())
