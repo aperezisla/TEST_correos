@@ -52,8 +52,8 @@ parser.add_argument('--casodeuso2',choices=casos_de_uso,help=casos_de_uso)
 parser.add_argument('--casodeuso3',choices=casos_de_uso,help=casos_de_uso)
 parser.add_argument('--pro',action='store_true', default = False)
 parser.add_argument('--newuser',required=True,help ='Formato nombre.apellido')
-parser.add_argument('user',help ='Usuario necesario para los correos')
-parser.add_argument('password',help ='Contraseña necesaria para los correos')
+parser.add_argument('--u',help ='Usuario necesario para los correos')
+parser.add_argument('--p',help ='Contraseña necesaria para los correos')
 parser.add_argument('--address',required=True,help ='Dirección de correo a enviar las credenciales')
 args = parser.parse_args()
 
@@ -70,5 +70,5 @@ if args.casodeuso3 != None:
 	mis_casos.append(args.casodeuso3)
 
 accounts = roles[args.rol]
-functions.assign_role_arn(accounts,args.user,args.password,args.address,args.newuser,args.rol,mis_casos,entornos) 
+functions.assign_role_arn(accounts,args.u,args.p,args.address,args.newuser,args.rol,mis_casos,entornos) 
 print('[INFO] Finalizado con éxito.')
