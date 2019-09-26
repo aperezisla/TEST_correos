@@ -16,11 +16,11 @@ import argparse
 
 casos_de_uso=[
 	'PLEXT',
-	'PLEXT TOA',
-	'PLEXT ASSIA',
-	'PLEXT HADA',
+	'PLEXT_TOA',
+	'PLEXT_ASSIA',
+	'PLEXT_HADA',
 	'ASTRO',
-	'VIDEO Y PLATAFORMAS'
+	'VIDEO_Y_PLATAFORMAS'
 ]
 
 entornos = {
@@ -35,13 +35,13 @@ entornos = {
 }
 
 roles = {
-	'Desarrollador global':['dev'],
+	'Desarrollador_Global':['dev'],
 	'Desarrollador':['dev'],
-	'Desarrollador avanzado de Tableau':['dev'],
+	'Desarrollador_Avanzado_De_Tableau':['dev'],
 	#al responsable se le añade solo a pro si lo necesita
-	'Responsable de area usuaria':[''],
+	'Responsable_De_Area_Usuaria':[''],
 	'Engineering':['pro','int','dev','opt'],
-	'Engineering Manager':['pro','int','dev','opt']
+	'Engineering_Manager':['pro','int','dev','opt']
 }
 
 #ARGUMENTOS: 
