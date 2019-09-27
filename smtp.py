@@ -20,7 +20,7 @@ casos_de_uso=[
 	'PLEXT_ASSIA',
 	'PLEXT_HADA',
 	'ASTRO',
-	'VIDEO_Y_PLATAFORMAS'
+	'VIDEO_Y_PLATAFORMAS',
 	'No'
 ]
 
