@@ -63,11 +63,11 @@ if args.pro == True:
 		roles[args.rol].append('pro')
 		
 mis_casos=[]
-if args.casodeuso1 != None:
+if args.casodeuso1 != 'No':
 	mis_casos.append(args.casodeuso1)
-if args.casodeuso2 != None:
+if args.casodeuso2 != 'No':
 	mis_casos.append(args.casodeuso2)
-if args.casodeuso3 != None:
+if args.casodeuso3 != 'No':
 	mis_casos.append(args.casodeuso3)
 
 accounts = roles[args.rol]
