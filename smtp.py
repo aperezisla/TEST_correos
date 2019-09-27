@@ -21,6 +21,7 @@ casos_de_uso=[
 	'PLEXT_HADA',
 	'ASTRO',
 	'VIDEO_Y_PLATAFORMAS'
+	'No'
 ]
 
 entornos = {
