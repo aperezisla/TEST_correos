@@ -69,6 +69,7 @@ if args.casodeuso2 != 'No':
 	mis_casos.append(args.casodeuso2)
 if args.casodeuso3 != 'No':
 	mis_casos.append(args.casodeuso3)
+print(mis_casos)
 
 accounts = roles[args.rol]
 functions.assign_role_arn(accounts,args.u,args.p,args.address,args.newuser,args.rol,mis_casos,entornos) 

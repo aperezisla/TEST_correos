@@ -139,13 +139,13 @@ def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
 					print('[INFO] Asignados los grupos NaDevPlantaExternaAssia, Hada y TOA en su usuario dev')
 					assign_specific_policy('NaDevPlantaExternaCrossAccountPolicy',iam,newuser)
 					print('[INFO] Asignada la política NaDevPlantaExternaCrossAccountPolicy en su usuario dev')
-				if caso == 'PLEXT TOA':
+				if caso == 'PLEXT_TOA':
 					assign_specific_group('NaDevPlantaExternaTOA',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevPlantaExternaTOA en su usuario dev')
-				if caso == 'PLEXT ASSIA':
+				if caso == 'PLEXT_ASSIA':
 					assign_specific_group('NaDevPlantaExternaAssia',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevPlantaExternaAssia en su usuario dev')
-				if caso == 'PLEXT HADA':
+				if caso == 'PLEXT_HADA':
 					assign_specific_group('NaDevPlantaExternaHada',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevPlantaExternaHada en su usuario dev')
 			if cuenta == 'pro':
@@ -159,35 +159,35 @@ def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 		for caso in mis_casos:
 			if cuenta == 'dev':
-				if caso == 'PLEXT TOA':
+				if caso == 'PLEXT_TOA':
 					assign_specific_group('NaDevTableauPlantaExternaTOA',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaTOA en su usuario dev')
-				if caso == 'PLEXT ASSIA':
+				if caso == 'PLEXT_ASSIA':
 					assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaASSIA en su usuario dev')
-				if caso == 'PLEXT HADA':
+				if caso == 'PLEXT_HADA':
 					assign_specific_group('NaDevTableauPlantaExternaHADA',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaHADA en su usuario dev')
 				if caso == 'ASTRO':
 					assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevTableauPlantaInternaASTRO en su usuario dev')
-				if caso == 'VIDEO Y PLATAFORMAS':
+				if caso == 'VIDEO_Y_PLATAFORMAS':
 					assign_specific_group('NaDevTableauOpsPlatGlob',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevTableauOpsPlatGlob en su usuario dev')
 			if cuenta == 'pro':
-				if caso == 'PLEXT TOA':
+				if caso == 'PLEXT_TOA':
 					assign_specific_group('NaDevTableauPlantaExternaTOA',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaTOA en su usuario pro')
-				if caso == 'PLEXT ASSIA':
+				if caso == 'PLEXT_ASSIA':
 					assign_specific_group('NaDevTableauPlantaExternaASSIA',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaASSIA en su usuario pro')
-				if caso == 'PLEXT HADA':
+				if caso == 'PLEXT_HADA':
 					assign_specific_group('NaDevTableauPlantaExternaHADA',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevTableauPlantaExternaHADA en su usuario pro')
 				if caso == 'ASTRO':
 					assign_specific_group('NaDevTableauPlantaInternaASTRO',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevTableauPlantaInternaASTRO en su usuario pro')
-				if caso == 'VIDEO Y PLATAFORMAS':
+				if caso == 'VIDEO_Y_PLATAFORMAS':
 					assign_specific_group('NaDevTableauOpsPlatGlob',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevTableauOpsPlatGlob en su usuario pro')
 	if rol_str == 'Responsable de area usuaria':
