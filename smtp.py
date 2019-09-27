@@ -47,9 +47,9 @@ roles = {
 #ARGUMENTOS: 
 parser = argparse.ArgumentParser()
 parser.add_argument('--rol', choices=roles,required=True,help=roles)
-parser.add_argument('--casodeuso1',choices=casos_de_uso,help=casos_de_uso)
-parser.add_argument('--casodeuso2',choices=casos_de_uso,help=casos_de_uso)
-parser.add_argument('--casodeuso3',choices=casos_de_uso,help=casos_de_uso)
+parser.add_argument('--casodeuso1',choices=casos_de_uso,help=casos_de_uso,required=False)
+parser.add_argument('--casodeuso2',choices=casos_de_uso,help=casos_de_uso,required=False)
+parser.add_argument('--casodeuso3',choices=casos_de_uso,help=casos_de_uso,required=False)
 parser.add_argument('--pro',action='store_true', default = False)
 parser.add_argument('--newuser',required=True,help ='Formato nombre.apellido')
 parser.add_argument('--u',help ='Usuario necesario para los correos')
