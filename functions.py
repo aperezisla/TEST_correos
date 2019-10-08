@@ -216,6 +216,11 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 			if e.response['Error']['Code'] == 'EntityAlreadyExists':
 				print('[ERROR] El usuario ya existe')
 				print('[INFO] Compruebo que el usuario esté en los grupos correspondientes')
+				assign_groups(iam,cuenta,rol_str,newuser,mis_casos)
+				print('[INFO] Se ha asignado los grupos a los que no estaba anteriormente')
+				print('[INFO] No se envía email al ya tener usuario')
+				print('[INFO] Finalizado con éxito')
+				sys.exit()
 			else:
 				print('[ERROR] Error inesperado: %s' % e)
 
