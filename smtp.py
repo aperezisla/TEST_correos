@@ -56,14 +56,14 @@ parser.add_argument('--rol', choices=roles,required=True,help=roles)
 parser.add_argument('--casodeuso1',choices=casos_de_uso,help=casos_de_uso)
 parser.add_argument('--casodeuso2',choices=casos_de_uso,help=casos_de_uso)
 parser.add_argument('--casodeuso3',choices=casos_de_uso,help=casos_de_uso)
-parser.add_argument('Pro',choices=pro, default = 'No')
+parser.add_argument('pro',choices=pro, default = 'No')
 parser.add_argument('--newuser',required=True,help ='Formato nombre.apellido')
 parser.add_argument('--u',help ='Usuario necesario para los correos')
 parser.add_argument('--p',help ='Contraseña necesaria para los correos')
 parser.add_argument('--address',required=True,help ='Dirección de correo a enviar las credenciales')
 args = parser.parse_args()
 
-if args.Pro == 'Si':
+if args.pro == 'Si':
 	if 'pro' not in roles[args.rol]:
 		roles[args.rol].append('pro')
 		
