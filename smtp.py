@@ -63,7 +63,7 @@ parser.add_argument('--p',help ='Contraseña necesaria para los correos')
 parser.add_argument('--address',required=True,help ='Dirección de correo a enviar las credenciales')
 args = parser.parse_args()
 
-if args.pro == 'Si':
+if args.Pro == 'Si':
 	if 'pro' not in roles[args.rol]:
 		roles[args.rol].append('pro')
 		
