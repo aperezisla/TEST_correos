@@ -202,6 +202,7 @@ def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
 
 def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,entornos):
 	for cuenta in accounts:
+		print('creando cuenta en:' + cuenta)
 		nombre_entorno=entornos[cuenta][0]
 		role_arn=entornos[cuenta][1]
 		consoleLogin=entornos[cuenta][2]
@@ -219,8 +220,14 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 				assign_groups(iam,cuenta,rol_str,newuser,mis_casos)
 				print('[INFO] Se ha asignado los grupos a los que no estaba anteriormente')
 				print('[INFO] No se envía email al ya tener usuario')
-				print('[INFO] Finalizado con éxito')
-				sys.exit()
+				#Si es la ultima cuenta, salir del programa, sino pasar al siguiente paso
+				if (len(accounts) == 1):
+					print('[INFO] Finalizado con éxito')
+					sys.exit()
+				else:
+					accounts.remove(cuenta)
+					print('BORRO Y PASO A LA SIGUIENTE CUENTA')
+					continue
 			else:
 				print('[ERROR] Error inesperado: %s' % e)
 
@@ -235,3 +242,6 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 		msg2 = x.mail2()
 		x.envio(msg2)
 		print('[INFO] El mail con las credenciales se ha mandado correctamente')
+
+		#Elimino la cuenta en la que se ha creado el usuario
+		accounts.remove(cuenta)
