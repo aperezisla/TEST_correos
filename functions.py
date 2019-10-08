@@ -59,7 +59,7 @@ def aws_connection(role_arn):
 
 def create_credentials(newuser,iam,rol_str,consoleLogin):
 	#El responsable de area no incluye acceso a la consola, solo se crea el par de access key
-	if rol_str != 'Responsable de area usuaria': 
+	if rol_str != 'Responsable_De_Area_Usuaria': 
 		while True:
 			try:
 				contrasena = generateSecureRandomString(12)
@@ -81,12 +81,12 @@ def create_credentials(newuser,iam,rol_str,consoleLogin):
 	data.pop('Status')
 	data.pop('CreateDate')
 
-	if rol_str != 'Responsable de area usuaria':
+	if rol_str != 'Responsable_De_Area_Usuaria':
 		data['Password'] = contrasena
 	data['ConsoleLoginLink']='https://'+consoleLogin+'.signin.aws.amazon.com/console'
 	with open('credentials.csv','w') as f:
 		f.write("%s,%s\n"%('UserName',data['UserName']))
-		if rol_str != 'Responsable de area usuaria':
+		if rol_str != 'Responsable_De_Area_Usuaria':
 			f.write("%s,%s\n"%('Password',data['Password']))
 		f.write("%s,%s\n"%('AccessKeyId',data['AccessKeyId']))
 		f.write("%s,%s\n"%('SecretAccessKey',data['SecretAccessKey']))
@@ -118,7 +118,7 @@ def assign_specific_policy(policy,iam,newuser):
 
 
 def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
-	if rol_str == 'Desarrollador global':
+	if rol_str == 'Desarrollador_Global':
 		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 		if cuenta == 'dev':
@@ -154,7 +154,7 @@ def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
 					assign_specific_group('NaDevPlantaExternaHada',iam,newuser)
 					assign_specific_group('NaDevPlantaExternaTOA',iam,newuser)
 					print('[INFO] Asignados los grupos NaDevPlantaExternaAssia, Hada y TOA en su usuario pro')
-	if rol_str == 'Desarrollador avanzado de Tableau':
+	if rol_str == 'Desarrollador_Avanzado_De_Tableau':
 		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 		for caso in mis_casos:
@@ -190,13 +190,13 @@ def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
 				if caso == 'VIDEO_Y_PLATAFORMAS':
 					assign_specific_group('NaDevTableauOpsPlatGlob',iam,newuser)
 					print('[INFO] Asignado el grupo NaDevTableauOpsPlatGlob en su usuario pro')
-	if rol_str == 'Responsable de area usuaria':
+	if rol_str == 'Responsable_De_Area_Usuaria':
 		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 	if rol_str == 'Engineering':
 		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
-	if rol_str == 'Engineering Manager':
+	if rol_str == 'Engineering_Manager':
 		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 
@@ -215,6 +215,7 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 		except ClientError as e:
 			if e.response['Error']['Code'] == 'EntityAlreadyExists':
 				print('[ERROR] El usuario ya existe')
+				print('[INFO] Compruebo que el usuario esté en los grupos correspondientes')
 			else:
 				print('[ERROR] Error inesperado: %s' % e)
 
