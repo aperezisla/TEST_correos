@@ -110,10 +110,10 @@ def assign_specific_group(group,iam,newuser):
 		UserName=newuser
 	)
 
-def assign_specific_policy(policy,iam,newuser):
+def assign_specific_policy(policy_arn,iam,newuser):
 	response=iam.attach_user_policy(
 		UserName=newuser,
-		PolicyArn=policy
+		PolicyArn=policy_arn
 	)
 
 
@@ -137,7 +137,7 @@ def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
 					assign_specific_group('NaDevPlantaExternaHada',iam,newuser)
 					assign_specific_group('NaDevPlantaExternaTOA',iam,newuser)
 					print('[INFO] Asignados los grupos NaDevPlantaExternaAssia, Hada y TOA en su usuario dev')
-					assign_specific_policy('NaDevPlantaExternaCrossAccountPolicy',iam,newuser)
+					assign_specific_policy('arn:aws:iam::363896548138:policy/NaDevPlantaExternaCrossAccountPolicy',iam,newuser)
 					print('[INFO] Asignada la política NaDevPlantaExternaCrossAccountPolicy en su usuario dev')
 				if caso == 'PLEXT_TOA':
 					assign_specific_group('NaDevPlantaExternaTOA',iam,newuser)
