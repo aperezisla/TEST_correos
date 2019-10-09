@@ -221,7 +221,7 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 				print('[INFO] Se ha asignado los grupos a los que no estaba anteriormente')
 				print('[INFO] No se envía email al ya tener usuario')
 				#Si es la ultima cuenta, salir del programa, sino pasar al siguiente paso
-				if (len(accounts) == 1):
+				if (len(accounts) == 0):
 					print('[INFO] Finalizado con éxito 2')
 					sys.exit()
 				else:
