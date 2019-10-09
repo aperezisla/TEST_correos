@@ -245,3 +245,4 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 		#Elimino la cuenta en la que se ha creado el usuario
 		accounts.remove(cuenta)
 		print('elimino la cuenta'+cuenta)
+		print(accounts)
