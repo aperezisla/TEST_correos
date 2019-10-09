@@ -242,6 +242,6 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 		msg2 = x.mail2()
 		x.envio(msg2)
 		print('[INFO] El mail con las credenciales se ha mandado correctamente')
-
 		#Elimino la cuenta en la que se ha creado el usuario
 		accounts.remove(cuenta)
+		print('elimino la cuenta'+cuenta)
