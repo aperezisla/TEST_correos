@@ -202,7 +202,7 @@ def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
 
 def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,entornos):
 	for cuenta in accounts:
-		print(accounts)
+		#print(accounts)
 		nombre_entorno=entornos[cuenta][0]
 		role_arn=entornos[cuenta][1]
 		consoleLogin=entornos[cuenta][2]
@@ -222,7 +222,7 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 				print('[INFO] No se envía email al ya tener usuario')
 				#Si es la ultima cuenta, salir del programa, sino pasar al siguiente paso
 				if (len(accounts) == 1):
-					print('[INFO] Finalizado con éxito')
+					print('[INFO] Finalizado con éxito 2')
 					sys.exit()
 				else:
 					accounts.remove(cuenta)
@@ -246,3 +246,5 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 		accounts.remove(cuenta)
 		print('elimino la cuenta'+cuenta)
 		print(accounts)
+
+
