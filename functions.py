@@ -202,7 +202,7 @@ def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
 
 def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,entornos):
 	for cuenta in accounts:
-		print('necesita cuenta en:' + accounts)
+		print(accounts)
 		nombre_entorno=entornos[cuenta][0]
 		role_arn=entornos[cuenta][1]
 		consoleLogin=entornos[cuenta][2]
