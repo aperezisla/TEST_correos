@@ -216,18 +216,18 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 		except ClientError as e:
 			if e.response['Error']['Code'] == 'EntityAlreadyExists':
 				print('[ERROR] El usuario ya existe')
-				print('[INFO] Compruebo que el usuario esté en los grupos correspondientes')
-				assign_groups(iam,cuenta,rol_str,newuser,mis_casos)
-				print('[INFO] Se ha asignado los grupos a los que no estaba anteriormente')
-				print('[INFO] No se envía email al ya tener usuario')
+				#print('[INFO] Compruebo que el usuario esté en los grupos correspondientes')
+				#assign_groups(iam,cuenta,rol_str,newuser,mis_casos)
+				#print('[INFO] Se ha asignado los grupos a los que no estaba anteriormente')
+				#print('[INFO] No se envía email al ya tener usuario')
 				#Si es la ultima cuenta, salir del programa, sino pasar al siguiente paso
-				if (len(accounts) == 0):
-					print('[INFO] Finalizado con éxito 2')
-					sys.exit()
-				else:
-					accounts.remove(cuenta)
-					print('BORRO Y PASO A LA SIGUIENTE CUENTA')
-					continue
+				#if (len(accounts) == 0):
+					#print('[INFO] Finalizado con éxito 2')
+					#sys.exit()
+				#else:
+					#accounts.remove(cuenta)
+					#print('BORRO Y PASO A LA SIGUIENTE CUENTA')
+					#continue
 			else:
 				print('[ERROR] Error inesperado: %s' % e)
 
@@ -243,8 +243,8 @@ def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,ent
 		x.envio(msg2)
 		print('[INFO] El mail con las credenciales se ha mandado correctamente')
 		#Elimino la cuenta en la que se ha creado el usuario
-		accounts.remove(cuenta)
-		print('elimino la cuenta'+cuenta)
-		print(accounts)
+		#accounts.remove(cuenta)
+		#print('elimino la cuenta'+cuenta)
+		#print(accounts)
 
 
