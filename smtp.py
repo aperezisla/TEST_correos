@@ -40,7 +40,7 @@ roles = {
 	'Desarrollador':['dev'],
 	'Desarrollador_Avanzado_De_Tableau':['dev'],
 	#al responsable se le añade solo a pro si lo necesita
-	'Responsable_De_Area_Usuaria':[''],
+	'Responsable_De_Area_Usuaria':[],
 	'Engineering':['pro','int','dev','opt'],
 	'Engineering_Manager':['pro','int','dev','opt']
 }
@@ -66,7 +66,7 @@ args = parser.parse_args()
 if args.pro != 'No':
 	if 'pro' not in roles[args.rol]:
 		roles[args.rol].append('pro')
-print(roles)
+
 		
 mis_casos=[]
 if args.casodeuso1 != 'No':
