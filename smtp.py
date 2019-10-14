@@ -32,7 +32,7 @@ entornos = {
 	'dev' : 
 		['desarrollo','arn:aws:iam::363896548138:role/dev-na-delegated-jenkins','na-dev'],
 	'opt' : 
-		['operaciones','arn:aws:iam::416481324865:role/pro-opt-delegated-jenkins','na-opt']
+		['operaciones','arn:aws:iam::416481324865:role/opt-na-delegated-jenkins','na-opt']
 }
 
 roles = {
