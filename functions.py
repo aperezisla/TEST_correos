@@ -197,15 +197,18 @@ def assign_groups(iam,cuenta,rol_str,newuser,mis_casos):
 		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 		assign_specific_policy('arn:aws:iam::aws:policy/AdministratorAccess',iam,newuser)
-		print('[INFO] Asignada la política AdministratorAccess en su usuario en '+ cuenta)
+		print('[INFO] Asignada la política AdministratorAccess en su usuario de '+ cuenta)
 		if cuenta == 'pro' or cuenta =='opt' or cuenta=='int':
 			assign_specific_policy('arn:aws:iam::aws:policy/IAMUserChangePassword',iam,newuser)
-			print('[INFO] Asignada la política IAMUserChangePassword en su usuario en '+ cuenta)
+			print('[INFO] Asignada la política IAMUserChangePassword en su usuario de '+ cuenta)
 	if rol_str == 'Engineering_Manager':
 		assign_basicforce(iam,newuser)
 		print('[INFO] Asignados los grupos BasicIAM y ForceMFA')
 		assign_specific_policy('arn:aws:iam::aws:policy/AdministratorAccess',iam,newuser)
-		print('[INFO] Asignada la política AdministratorAccess en su usuario en '+ cuenta)
+		print('[INFO] Asignada la política AdministratorAccess en su usuario de '+ cuenta)
+		if cuenta == 'pro' or cuenta == 'opt' or cuenta == 'int':
+			assign_specific_policy('arn:aws:iam::aws:policy/IAMUserChangePassword',iam,newuser)
+			print('[INFO] Asignada la política IAMUserChangePassword en su usuario de '+ cuenta)
 
 def assign_role_arn(accounts,user,password,address,newuser,rol_str,mis_casos,entornos):
 	for cuenta in accounts:
