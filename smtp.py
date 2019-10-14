@@ -66,6 +66,7 @@ args = parser.parse_args()
 if args.pro != 'No':
 	if 'pro' not in roles[args.rol]:
 		roles[args.rol].append('pro')
+print(roles)
 		
 mis_casos=[]
 if args.casodeuso1 != 'No':
